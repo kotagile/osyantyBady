@@ -1,0 +1,339 @@
+classDiagram
+    %% Entity Classes
+    class User {
+        -String userId
+        -String userName
+        -String passwordHash
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        -Boolean isActive
+        +getUserId() String
+        +setUserName(String) void
+        +getWorkouts() List
+    }
+    
+    class UserGoal {
+        -Long goalId
+        -String userId
+        -String goalDuration
+        -Integer weeklyFrequency
+        -String exerciseType
+        -Integer sessionTimeMinutes
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        -Boolean isActive
+        +getWeeklyFrequency() Integer
+        +setGoalDuration(String) void
+    }
+    
+    class Workout {
+        -String workoutId
+        -String userId
+        -LocalDate workoutDate
+        -LocalDateTime startTime
+        -LocalDateTime endTime
+        -Integer durationSeconds
+        -String exerciseType
+        -String comment
+        -String status
+        +getDurationMinutes() Integer
+        +isCompleted() Boolean
+    }
+    
+    class UserBuddy {
+        -Long buddyId
+        -String requesterId
+        -String requestedId
+        -String status
+        -LocalDateTime requestedAt
+        -LocalDateTime respondedAt
+        +isAccepted() Boolean
+        +isPending() Boolean
+    }
+    
+    class Notification {
+        -String notificationId
+        -String fromUserId
+        -String toUserId
+        -String notificationType
+        -String title
+        -String message
+        -String relatedData
+        -Boolean isRead
+        -LocalDateTime createdAt
+        +markAsRead() void
+        +getRelatedDataAsMap() Map
+    }
+    
+    class HealthData {
+        -Long healthId
+        -String userId
+        -String dataType
+        -BigDecimal dataValue
+        -String dataText
+        -LocalDate recordedDate
+        -LocalDateTime createdAt
+        +isWeightData() Boolean
+        +getFormattedValue() String
+    }
+    
+    class WorkoutReaction {
+        -Long reactionId
+        -String workoutId
+        -String userId
+        -String reactionType
+        -LocalDateTime createdAt
+        +isLikeReaction() Boolean
+    }
+    
+    %% Repository Interfaces
+    class UserRepository {
+        <<interface>>
+        +findById(String) Optional
+        +findByUserName(String) Optional
+        +existsById(String) Boolean
+        +save(User) User
+        +findAll() List
+    }
+    
+    class WorkoutRepository {
+        <<interface>>
+        +findByUserIdAndDateRange(String, LocalDate, LocalDate) List
+        +countByUserIdAndDate(String, LocalDate) Integer
+        +findOngoingWorkoutByUserIdAndDate(String, LocalDate) Optional
+        +countDistinctWorkoutDays(String, LocalDate, LocalDate) Integer
+    }
+    
+    class BuddyRepository {
+        <<interface>>
+        +findAcceptedBuddiesWithUser(String) List
+        +existsPendingRequest(String, String) Boolean
+        +areBuddies(String, String) Boolean
+        +findPendingRequestsByUserId(String) List
+    }
+    
+    class NotificationRepository {
+        <<interface>>
+        +findByToUserIdOrderByCreatedAtDesc(String) List
+        +findUnreadByToUserId(String) List
+        +countUnreadByToUserId(String) Long
+        +markAsReadByIds(List) Integer
+    }
+    
+    class GoalRepository {
+        <<interface>>
+        +findActiveGoalByUserId(String) Optional
+        +findActiveGoalsByUserId(String) List
+        +save(UserGoal) UserGoal
+    }
+    
+    %% Service Classes
+    class UserService {
+        -UserRepository userRepository
+        -PasswordEncoder passwordEncoder
+        +registerUser(UserRegistrationDto) User
+        +authenticateUser(String, String) User
+        +findById(String) User
+        +updateProfile(String, UserProfileDto) User
+        -validateUserRegistration(UserRegistrationDto) void
+        -createDefaultGoal(String) void
+    }
+    
+    class WorkoutService {
+        -WorkoutRepository workoutRepository
+        -GoalRepository goalRepository
+        -NotificationService notificationService
+        +startWorkout(String, String) Workout
+        +completeWorkout(String, String) Workout
+        +pauseWorkout(String) Workout
+        +resumeWorkout(String) Workout
+        +getWeeklyProgress(String) ProgressDto
+        -notifyBuddies(String, Workout) void
+    }
+    
+    class BuddyService {
+        -BuddyRepository buddyRepository
+        -UserRepository userRepository
+        -NotificationService notificationService
+        +sendBuddyRequest(String, String) void
+        +acceptBuddyRequest(Long) void
+        +rejectBuddyRequest(Long) void
+        +getBuddyList(String) List
+        +getBuddyProgress(String) List
+        +getBuddyIds(String) List
+        -sendBuddyRequestNotification(String, String) void
+    }
+    
+    class NotificationService {
+        -NotificationRepository notificationRepository
+        +createNotification(NotificationDto) Notification
+        +getNotificationHistory(String, Integer, Integer) List
+        +markAsRead(String) void
+        +getUnreadCount(String) Integer
+        +sendWorkoutCompletedNotification(String, Workout) void
+        -createWorkoutNotificationData(Workout) String
+    }
+    
+    class ProgressService {
+        -WorkoutRepository workoutRepository
+        -GoalRepository goalRepository
+        +calculateWeeklyProgress(String) ProgressDto
+        +calculateMonthlyProgress(String) ProgressDto
+        +generateEncouragementMessage(Integer) String
+        -getWeekStartAndEnd(LocalDate) Pair
+    }
+    
+    %% Controller Classes
+    class AuthController {
+        -UserService userService
+        +showLoginPage() String
+        +showRegisterPage(Model) String
+        +registerUser(UserRegistrationDto, BindingResult, Model) String
+        +login(String, String, HttpSession, Model) String
+        +logout(HttpSession) String
+    }
+    
+    class HomeController {
+        -WorkoutService workoutService
+        -BuddyService buddyService
+        -NotificationService notificationService
+        +home(Model, HttpSession) String
+        +showGoalSetting(Model, HttpSession) String
+        +setGoal(GoalDto, HttpSession) String
+        -addProgressDataToModel(Model, String) void
+    }
+    
+    class WorkoutController {
+        -WorkoutService workoutService
+        +startWorkout(HttpSession) String
+        +showTimer(String, Model) String
+        +pauseWorkout(String) ResponseEntity
+        +completeWorkout(String) ResponseEntity
+        +showReport(String, Model) String
+        +submitReport(String, String, HttpSession) String
+    }
+    
+    class BuddyController {
+        -BuddyService buddyService
+        -UserService userService
+        +buddyPage(Model, HttpSession) String
+        +searchUser(String, HttpSession) ResponseEntity
+        +sendBuddyRequest(String, HttpSession) ResponseEntity
+        +acceptRequest(Long, HttpSession) ResponseEntity
+        +rejectRequest(Long, HttpSession) ResponseEntity
+        +showBuddyDetail(String, Model) String
+    }
+    
+    class RecordController {
+        -WorkoutService workoutService
+        -HealthDataService healthDataService
+        +recordsPage(Model, HttpSession) String
+        +getWorkoutHistory(String, Integer, Integer) ResponseEntity
+        +addHealthData(HealthDataDto, HttpSession) ResponseEntity
+        +getStatistics(String, String) ResponseEntity
+    }
+    
+    %% DTO Classes
+    class UserRegistrationDto {
+        -String userId
+        -String userName
+        -String password
+        -String confirmPassword
+        +validate() List
+    }
+    
+    class WorkoutDto {
+        -String workoutId
+        -String userId
+        -LocalDateTime startTime
+        -LocalDateTime endTime
+        -Integer durationMinutes
+        -String exerciseType
+        -String comment
+        -String status
+    }
+    
+    class ProgressDto {
+        -Integer currentCount
+        -Integer targetCount
+        -Integer percentage
+        -String message
+        -String userName
+        +isGoalAchieved() Boolean
+    }
+    
+    class NotificationDto {
+        -String fromUserId
+        -String toUserId
+        -String type
+        -String title
+        -String message
+        -Map relatedData
+    }
+    
+    %% Configuration Classes
+    class SecurityConfig {
+        +passwordEncoder() PasswordEncoder
+        +filterChain(HttpSecurity) SecurityFilterChain
+        +authenticationManager() AuthenticationManager
+    }
+    
+    class DatabaseConfig {
+        +dataSource() DataSource
+        +transactionManager() PlatformTransactionManager
+        +entityManagerFactory() LocalContainerEntityManagerFactoryBean
+    }
+    
+    %% Utility Classes
+    class PasswordUtil {
+        +hashPassword(String) String
+        +verifyPassword(String, String) Boolean
+        +generateRandomPassword() String
+    }
+    
+    class DateUtil {
+        +getWeekStart(LocalDate) LocalDate
+        +getWeekEnd(LocalDate) LocalDate
+        +getMonthStart(LocalDate) LocalDate
+        +formatDuration(Integer) String
+        +isToday(LocalDate) Boolean
+    }
+    
+    %% Relationships - Entity Layer
+    User --* UserGoal : has
+    User --o Workout : performs
+    User --o UserBuddy : buddy_relationship
+    User --o Notification : notification_relationship
+    User --o HealthData : records
+    User --o WorkoutReaction : reacts
+    Workout --o WorkoutReaction : reactions
+    
+    %% Relationships - Service Dependencies
+    UserService --> UserRepository : uses
+    UserService --> PasswordUtil : uses
+    WorkoutService --> WorkoutRepository : uses
+    WorkoutService --> GoalRepository : uses
+    WorkoutService --> NotificationService : uses
+    BuddyService --> BuddyRepository : uses
+    BuddyService --> UserRepository : uses
+    BuddyService --> NotificationService : uses
+    NotificationService --> NotificationRepository : uses
+    ProgressService --> WorkoutRepository : uses
+    ProgressService --> GoalRepository : uses
+    
+    %% Relationships - Controller Dependencies
+    AuthController --> UserService : uses
+    HomeController --> WorkoutService : uses
+    HomeController --> BuddyService : uses
+    HomeController --> NotificationService : uses
+    WorkoutController --> WorkoutService : uses
+    BuddyController --> BuddyService : uses
+    BuddyController --> UserService : uses
+    RecordController --> WorkoutService : uses
+    
+    %% Relationships - Repository to Entity
+    UserRepository --> User : manages
+    WorkoutRepository --> Workout : manages
+    BuddyRepository --> UserBuddy : manages
+    NotificationRepository --> Notification : manages
+    GoalRepository --> UserGoal : manages

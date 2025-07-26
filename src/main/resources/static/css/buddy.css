@@ -1,0 +1,168 @@
+body, html {
+    background: #fafafa;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.buddy-container, .search-container {
+    width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+.header h1 {
+    color: #222;
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+.buddy-card, .search-card {
+    background: #e6d3ad;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    padding: 28px 24px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.card-title {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-input {
+    width: 100%;
+    background: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 14px;
+    font-size: 1rem;
+    color: #333;
+    box-sizing: border-box;
+}
+.form-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #C49A47;
+}
+.add-btn, .search-btn {
+    background: #C49A47;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 12px;
+}
+.add-btn:hover, .search-btn:hover {
+    background: #b88a2c;
+}
+.copy-link {
+    color: #C49A47;
+    text-decoration: none;
+    font-size: 0.9rem;
+    text-align: center;
+    display: block;
+}
+.copy-link:hover {
+    text-decoration: underline;
+}
+.buddy-item, .search-result-item {
+    background: #444;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.buddy-info, .user-info {
+    flex: 1;
+}
+.buddy-name, .user-name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+.buddy-time, .user-id {
+    font-size: 0.8rem;
+    color: #ccc;
+}
+.buddy-actions {
+    display: flex;
+    gap: 8px;
+}
+.btn-approve, .request-btn {
+    background: #C49A47;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-approve:hover, .request-btn:hover {
+    background: #b88a2c;
+}
+.btn-reject, .btn-remove {
+    background: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-reject:hover, .btn-remove:hover {
+    background: #f0f0f0;
+}
+.request-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+.empty-message {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    padding: 20px;
+}
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+}
+.error-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    text-align: center;
+}
+.success-message {
+    color: #27ae60;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    text-align: center;
+} 

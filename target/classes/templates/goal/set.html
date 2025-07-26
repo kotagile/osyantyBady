@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目標設定画面</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        body, html {
+            background: #fafafa;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* ホーム画面と同じレスポンシブ対応 */
+        .home-container {
+            width: 420px;
+            margin: 0 auto;
+            padding: 0 0 80px 0;
+            min-height: 100vh;
+            background: #fafafa;
+        }
+        
+        /* ヘッダー */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 20px 30px 20px;
+            background: #fff;
+        }
+        
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        
+        .notification-bell {
+            position: relative;
+            text-decoration: none;
+            color: #666;
+        }
+        
+        .bell-icon {
+            font-size: 1.5rem;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: #fff;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            min-width: 16px;
+            text-align: center;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            padding: 0 20px;
+        }
+        
+        .goal-card {
+            background: #e6d3ad;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            padding: 28px 24px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            background: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 14px;
+            font-size: 1rem;
+            color: #333;
+            box-sizing: border-box;
+        }
+        
+        .form-select {
+            width: 100%;
+            background: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 14px;
+            font-size: 1rem;
+            color: #333;
+            box-sizing: border-box;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+        }
+        
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #C49A47;
+        }
+        
+        .register-btn {
+            background: #C49A47;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+        
+        .register-btn:hover {
+            background: #b88a2c;
+        }
+        
+        .register-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        
+        /* ボトムナビゲーション */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 1px solid #eee;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            width: 420px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #666;
+            font-size: 0.8rem;
+            position: relative;
+            padding: 4px 8px;
+            transition: color 0.2s;
+        }
+        
+        .nav-item.active {
+            color: #C49A47;
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 2px;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .center-action {
+            transform: translateY(-18px);
+        }
+        
+        .nav-center-btn {
+            background: #C49A47;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 2px 8px rgba(196,154,71,0.2);
+            margin-bottom: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nav-center-btn:hover {
+            background: #b88a2c;
+            transform: scale(1.05);
+        }
+        
+        .center-icon {
+            font-size: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="home-container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <h1 class="page-title">目標設定画面</h1>
+            <a href="/notifications" class="notification-bell">
+                <span class="bell-icon">🔔</span>
+                <span th:if="${unreadNotificationCount > 0}" class="notification-badge" th:text="${unreadNotificationCount}">3</span>
+            </a>
+        </div>
+        <div class="main-content">
+            <!-- ここに元のフォームやエラーメッセージなどを移動 -->
+        
+        <!-- エラーメッセージ表示 -->
+        <div th:if="${error}" class="error-message" style="text-align: center; margin-bottom: 16px;" th:text="${error}"></div>
+        
+        <!-- サクセスメッセージ表示 -->
+        <div th:if="${success}" class="success-message" style="text-align: center; margin-bottom: 16px;" th:text="${success}"></div>
+        
+        <form th:action="@{/goal/set}" method="post" th:object="${goalDto}">
+            <div class="goal-card">
+                <div class="form-group">
+                    <label class="form-label">運動種別</label>
+                    <select class="form-select" name="exerciseType" th:field="*{exerciseType}" required>
+                        <option value="">運動種別を選択してください</option>
+                        <option value="ランニング">ランニング</option>
+                        <option value="ウォーキング">ウォーキング</option>
+                        <option value="サイクリング">サイクリング</option>
+                        <option value="ジムトレーニング">ジムトレーニング</option>
+                        <option value="ヨガ・ストレッチ">ヨガ・ストレッチ</option>
+                        <option value="水泳">水泳</option>
+                        <option value="その他">その他</option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('exerciseType')}" class="error-message" th:errors="*{exerciseType}"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">運動時間（分）</label>
+                    <input type="number" class="form-input" name="sessionTimeMinutes" th:field="*{sessionTimeMinutes}" 
+                           placeholder="運動時間を入力してください" min="1" max="300" required>
+                    <div th:if="${#fields.hasErrors('sessionTimeMinutes')}" class="error-message" th:errors="*{sessionTimeMinutes}"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">目標期間</label>
+                    <select class="form-select" name="goalDuration" th:field="*{goalDuration}" required>
+                        <option value="">目標期間を選択してください</option>
+                        <option value="3months">3ヶ月</option>
+                        <option value="6months">6ヶ月</option>
+                        <option value="1year">1年</option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('goalDuration')}" class="error-message" th:errors="*{goalDuration}"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">1週間当たりの運動する頻度</label>
+                    <select class="form-select" name="weeklyFrequency" th:field="*{weeklyFrequency}" required>
+                        <option value="">運動する頻度を選択してください</option>
+                        <option value="1">週1回</option>
+                        <option value="2">週2回</option>
+                        <option value="3">週3回</option>
+                        <option value="4">週4回</option>
+                        <option value="5">週5回</option>
+                        <option value="6">週6回</option>
+                        <option value="7">毎日</option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('weeklyFrequency')}" class="error-message" th:errors="*{weeklyFrequency}"></div>
+                </div>
+                
+                <button type="submit" class="register-btn">登録する</button>
+            </div>
+        </form>
+        
+        <!-- ナビゲーション -->
+        </div>
+    </div>
+    <!-- ボトムナビゲーション -->
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">ホーム</span>
+            </a>
+            <a href="/buddy/search" class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">バディ追加</span>
+            </a>
+            <a href="/workout/start" class="nav-item center-action">
+                <div class="nav-center-btn">
+                    <span class="center-icon">🏃</span>
+                </div>
+                <span class="nav-label">運動を始める</span>
+            </a>
+            <a href="/workout/records" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">私の記録</span>
+            </a>
+            <a href="/goal/set" class="nav-item active">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">目標設定</span>
+            </a>
+        </div>
+    </nav>
+    <script>
+        // フォームバリデーション
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const exerciseType = document.querySelector('select[name="exerciseType"]').value;
+            const sessionTimeMinutes = document.querySelector('input[name="sessionTimeMinutes"]').value;
+            const goalDuration = document.querySelector('select[name="goalDuration"]').value;
+            const weeklyFrequency = document.querySelector('select[name="weeklyFrequency"]').value;
+            
+            if (!exerciseType || !sessionTimeMinutes || !goalDuration || !weeklyFrequency) {
+                e.preventDefault();
+                alert('すべての項目を入力してください。');
+                return false;
+            }
+            
+            if (sessionTimeMinutes < 1 || sessionTimeMinutes > 300) {
+                e.preventDefault();
+                alert('運動時間は1分以上300分以下で入力してください。');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,214 @@
+/* Workout Start Page */
+.workout-start-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    padding: 36px 24px 28px 24px;
+    width: 400px;
+    margin: 60px auto 0 auto;
+}
+
+.workout-start-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+}
+
+.exercise-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.exercise-type-btn {
+    background: #E9E9ED;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.exercise-type-btn:hover {
+    background: #f0f0f4;
+    border-color: #C49A47;
+}
+
+.exercise-type-btn.selected {
+    background: #C49A47;
+    color: #fff;
+    border-color: #C49A47;
+}
+
+.start-workout-btn {
+    background: #C49A47;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 10px;
+    box-shadow: 0 2px 6px rgba(196,154,71,0.10);
+    transition: background 0.2s;
+}
+
+.start-workout-btn:hover {
+    background: #b88a2c;
+}
+
+/* Workout In-Progress Page */
+.workout-progress-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    padding: 36px 24px 28px 24px;
+    width: 400px;
+    margin: 60px auto 0 auto;
+}
+
+.workout-progress-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+}
+
+.timer-display {
+    text-align: center;
+    margin: 24px 0;
+}
+
+.timer {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #C49A47;
+    font-family: 'Courier New', monospace;
+}
+
+.timer-label {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 8px;
+}
+
+.progress-info {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 24px 0;
+}
+
+.progress-info h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.progress-info p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.complete-workout-btn {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 10px;
+    box-shadow: 0 2px 6px rgba(40,167,69,0.10);
+    transition: background 0.2s;
+}
+
+.complete-workout-btn:hover {
+    background: #218838;
+}
+
+/* Workout Complete Page */
+.workout-complete-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    padding: 36px 24px 28px 24px;
+    width: 400px;
+    margin: 60px auto 0 auto;
+}
+
+.workout-complete-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+}
+
+.completion-summary {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 24px 0;
+    text-align: center;
+}
+
+.completion-summary h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.completion-summary .duration {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #C49A47;
+    margin: 12px 0;
+}
+
+.comment-form {
+    margin: 24px 0;
+}
+
+.comment-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+.finish-workout-btn {
+    background: #C49A47;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 10px;
+    box-shadow: 0 2px 6px rgba(196,154,71,0.10);
+    transition: background 0.2s;
+}
+
+.finish-workout-btn:hover {
+    background: #b88a2c;
+} 

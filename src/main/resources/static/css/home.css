@@ -1,0 +1,237 @@
+/* ホーム画面専用スタイル */
+.home-container {
+    width: 420px;
+    margin: 0 auto;
+    padding: 0 0 80px 0;
+    min-height: 100vh;
+    background: #fafafa;
+}
+
+/* ヘッダー */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 30px 20px;
+    background: #fff;
+}
+
+.page-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.notification-bell {
+    position: relative;
+    text-decoration: none;
+    color: #666;
+}
+
+.bell-icon {
+    font-size: 1.5rem;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e74c3c;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    min-width: 16px;
+    text-align: center;
+}
+
+/* メインコンテンツ */
+.main-content {
+    padding: 0 20px;
+}
+
+/* 進捗カード */
+.progress-card, .buddy-progress-card {
+    background: #444;
+    border-radius: 16px;
+    padding: 30px 25px;
+    margin-bottom: 20px;
+    color: #fff;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.goal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+}
+
+.progress-percentage {
+    font-size: 2.1rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.card-subtitle {
+    font-size: 1rem;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #666;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill, .buddy-progress-fill {
+    height: 100%;
+    background: #C49A47;
+    border-radius: 8px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: width 0.3s ease;
+}
+
+.progress-message {
+    font-size: 0.95rem;
+    color: #ffe6b8;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+/* 運動開始エリア */
+.start-exercise-area {
+    background: #e6d3ad;
+    border-radius: 18px;
+    padding: 25px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(196,154,71,0.1);
+}
+
+.start-exercise-btn {
+    background: #C49A47;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(196,154,71,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.start-exercise-btn:hover {
+    background: #b88a2c;
+    transform: scale(1.05);
+}
+
+.exercise-icon {
+    font-size: 2rem;
+}
+
+.start-exercise-label {
+    color: #7a5a1a;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* ボトムナビゲーション */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #eee;
+    z-index: 1000;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    width: 420px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #666;
+    font-size: 0.8rem;
+    position: relative;
+    padding: 4px 8px;
+    transition: color 0.2s;
+}
+
+.nav-item.active {
+    color: #C49A47;
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+    margin-bottom: 2px;
+}
+
+.nav-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.center-action {
+    transform: translateY(-18px);
+}
+
+.nav-center-btn {
+    background: #C49A47;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    box-shadow: 0 2px 8px rgba(196,154,71,0.2);
+    margin-bottom: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-center-btn:hover {
+    background: #b88a2c;
+    transform: scale(1.05);
+}
+
+.center-icon {
+    font-size: 1.8rem;
+} 

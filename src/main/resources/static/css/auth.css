@@ -1,0 +1,113 @@
+/* 認証画面専用スタイル */
+.auth-container {
+    width: 420px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ログイン・登録カード */
+.login-card,
+.register-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+/* タイトル */
+.login-title,
+.register-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #C49A47;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* フォーム */
+.login-form,
+.register-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #C49A47;
+}
+
+/* ボタン */
+.login-btn,
+.register-btn {
+    width: 100%;
+    background: #C49A47;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 20px;
+}
+
+.login-btn:hover,
+.register-btn:hover {
+    background: #b88a2c;
+}
+
+/* エラーメッセージ */
+.error-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.field-error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    text-align: left;
+}
+
+/* リンク */
+.register-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #C49A47;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+} 

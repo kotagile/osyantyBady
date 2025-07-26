@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホーム</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+    <div class="home-container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <h1 class="page-title">ホーム画面</h1>
+            <a href="/notifications" class="notification-bell">
+                <span class="bell-icon">🔔</span>
+                <span th:if="${unreadNotificationCount > 0}" class="notification-badge" th:text="${unreadNotificationCount}">3</span>
+            </a>
+        </div>
+        
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <!-- ユーザー進捗カード -->
+            <div class="progress-card">
+                <div class="card-header">
+                    <h2 class="goal-title">週間目標: 週<span th:text="${progress.goalFrequency}">4</span>回</h2>
+                    <div class="progress-percentage" th:text="${progress.completedWorkouts}">67</div>
+                </div>
+                <div class="card-subtitle">あなたの進捗</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" th:style="'width: ' + ${progress.completedWorkouts} + '%'"></div>
+                </div>
+                <div class="progress-message" th:text="${progress.userName}">いつも頑張っててえらい。あともう少しで目標達成だよ!</div>
+                <div class="start-exercise-area">
+                    <a href="/workout/start" class="start-exercise-btn">
+                        <span class="exercise-icon">🏃</span>
+                    </a>
+                    <div class="start-exercise-label">今すぐ運動を始める</div>
+                </div>
+            </div>
+            
+            <!-- バディ進捗カード -->
+            <div class="buddy-progress-card" th:if="${!buddyProgress.empty}">
+                <div class="card-header">
+                    <h2 class="goal-title">週間目標: 週<span th:text="${buddyProgress[0].goalFrequency}">5</span>回</h2>
+                    <div class="progress-percentage" th:text="${buddyProgress[0].totalWorkouts}">80</div>
+                </div>
+                <div class="card-subtitle">バディオの進捗</div>
+                <div class="progress-bar">
+                    <div class="buddy-progress-fill" 
+                         th:style="'width: ' + ${buddyProgress[0].totalWorkouts != 0 ? (buddyProgress[0].totalWorkouts * 100 / buddyProgress[0].goalFrequency) : 0} + '%'"></div>
+                </div>
+                <div class="progress-message">バディオも頑張ってる。あなたも一緒に運動しよう!</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ボトムナビゲーション -->
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">ホーム</span>
+            </a>
+            <a href="/buddy/search" class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">バディ追加</span>
+            </a>
+            <a href="/workout/start" class="nav-item center-action">
+                <div class="nav-center-btn">
+                    <span class="center-icon">🏃</span>
+                </div>
+                <span class="nav-label">運動を始める</span>
+            </a>
+            <a href="/workout/records" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">私の記録</span>
+            </a>
+            <a href="/goal/set" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">目標設定</span>
+            </a>
+        </div>
+    </nav>
+    
+    <script th:src="@{/js/home.js}"></script>
+</body>
+</html> 

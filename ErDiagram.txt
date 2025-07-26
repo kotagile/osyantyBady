@@ -1,0 +1,91 @@
+erDiagram
+    %% ユーザーテーブル
+    users {
+        NVARCHAR_50_ user_id PK "ユーザーID"
+        NVARCHAR_100_ user_name "ユーザー名"
+        NVARCHAR_255_ password_hash "パスワードハッシュ"
+        DATETIME2 created_at "作成日時"
+        DATETIME2 updated_at "更新日時"
+        BIT is_active "アクティブフラグ"
+    }
+    
+    %% ユーザー目標テーブル
+    user_goals {
+        BIGINT goal_id PK "目標ID(IDENTITY)"
+        NVARCHAR_50_ user_id FK "ユーザーID"
+        NVARCHAR_20_ goal_duration "目標期間"
+        INT weekly_frequency "週間頻度"
+        NVARCHAR_50_ exercise_type "運動種別"
+        INT session_time_minutes "セッション時間(分)"
+        DATETIME2 created_at "作成日時"
+        DATETIME2 updated_at "更新日時"
+        BIT is_active "アクティブフラグ"
+    }
+    
+    %% 運動記録テーブル
+    workouts {
+        NVARCHAR_50_ workout_id PK "運動ID"
+        NVARCHAR_50_ user_id FK "ユーザーID"
+        DATE workout_date "運動日"
+        DATETIME2 start_time "開始時刻"
+        DATETIME2 end_time "終了時刻"
+        INT duration_seconds "運動時間(秒)"
+        NVARCHAR_50_ exercise_type "運動種別"
+        NVARCHAR_500_ comment "コメント"
+        NVARCHAR_20_ status "ステータス"
+        DATETIME2 created_at "作成日時"
+    }
+    
+    %% バディ関係テーブル
+    user_buddies {
+        BIGINT buddy_id PK "バディID(IDENTITY)"
+        NVARCHAR_50_ requester_id FK "リクエスト送信者ID"
+        NVARCHAR_50_ requested_id FK "リクエスト受信者ID"
+        NVARCHAR_20_ status "ステータス"
+        DATETIME2 requested_at "リクエスト日時"
+        DATETIME2 responded_at "応答日時"
+    }
+    
+    %% 通知テーブル
+    notifications {
+        NVARCHAR_50_ notification_id PK "通知ID"
+        NVARCHAR_50_ from_user_id FK "送信者ID"
+        NVARCHAR_50_ to_user_id FK "受信者ID"
+        NVARCHAR_30_ notification_type "通知種別"
+        NVARCHAR_100_ title "タイトル"
+        NVARCHAR_500_ message "メッセージ"
+        NVARCHAR_MAX_ related_data "関連データ(JSON)"
+        BIT is_read "既読フラグ"
+        DATETIME2 created_at "作成日時"
+    }
+    
+    %% 健康データテーブル
+    health_data {
+        BIGINT health_id PK "健康データID(IDENTITY)"
+        NVARCHAR_50_ user_id FK "ユーザーID"
+        NVARCHAR_20_ data_type "データ種別"
+        DECIMAL_10_2_ data_value "数値データ"
+        NVARCHAR_100_ data_text "テキストデータ"
+        DATE recorded_date "記録日"
+        DATETIME2 created_at "作成日時"
+    }
+    
+    %% 運動リアクションテーブル
+    workout_reactions {
+        BIGINT reaction_id PK "リアクションID(IDENTITY)"
+        NVARCHAR_50_ workout_id FK "運動ID"
+        NVARCHAR_50_ user_id FK "ユーザーID"
+        NVARCHAR_20_ reaction_type "リアクション種別"
+        DATETIME2 created_at "作成日時"
+    }
+    
+    %% リレーション定義
+    users ||--o| user_goals : "has"
+    users ||--o{ workouts : "performs"
+    users ||--o{ health_data : "records"
+    users ||--o{ notifications : "receives"
+    users ||--o{ notifications : "sends"
+    users ||--o{ user_buddies : "requests"
+    users ||--o{ user_buddies : "requested_by"
+    users ||--o{ workout_reactions : "reacts"
+    workouts ||--o{ workout_reactions : "has_reactions"

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通知</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/notification.css}">
+</head>
+<body>
+    <div class="home-container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <h1 class="page-title">通知</h1>
+            <button id="markAllReadBtn" class="mark-all-read-btn">全て既読</button>
+        </div>
+        
+        <div class="main-content">
+            <div class="notification-list">
+                <div th:if="${notifications.empty}" class="empty-notifications">
+                    <p>通知はありません</p>
+                </div>
+                
+                <div th:each="notification : ${notifications}" 
+                     th:class="${notification.isRead ? 'notification-item' : 'notification-item unread'}"
+                     th:attr="data-notification-id=${notification.notificationId}"
+                     class="notification-item">
+                    
+                    <div class="notification-header-row">
+                        <h3 class="notification-title-text" th:text="${notification.title}">通知タイトル</h3>
+                        <span class="notification-time" th:text="${#temporals.format(notification.createdAt, 'MM/dd HH:mm')}">12/25 10:30</span>
+                    </div>
+                    
+                    <p class="notification-message" th:text="${notification.message}">通知メッセージ</p>
+                    
+                    <span th:class="${'notification-type-badge ' + notification.notificationType}" 
+                          th:text="${getNotificationTypeLabel(notification.notificationType)}">通知種別</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ボトムナビゲーション -->
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">ホーム</span>
+            </a>
+            <a href="/buddy/search" class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">バディ追加</span>
+            </a>
+            <a href="/workout/start" class="nav-item center-action">
+                <div class="nav-center-btn">
+                    <span class="center-icon">🏃</span>
+                </div>
+                <span class="nav-label">運動を始める</span>
+            </a>
+            <a href="/workout/records" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">私の記録</span>
+            </a>
+            <a href="/goal/set" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">目標設定</span>
+            </a>
+        </div>
+    </nav>
+    
+    <script th:src="@{/js/notification.js}"></script>
+</body>
+</html> 
