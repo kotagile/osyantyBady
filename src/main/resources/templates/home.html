@@ -32,9 +32,11 @@
                 </div>
                 <div class="progress-message" th:text="${progress.userName}">いつも頑張っててえらい。あともう少しで目標達成だよ!</div>
                 <div class="start-exercise-area">
-                    <a href="/workout/start" class="start-exercise-btn">
-                        <span class="exercise-icon">🏃</span>
-                    </a>
+                    <form th:action="@{/workout/start-with-goal}" method="post" style="display: inline;">
+                        <button type="submit" class="start-exercise-btn">
+                            <span class="exercise-icon">🏃</span>
+                        </button>
+                    </form>
                     <div class="start-exercise-label">今すぐ運動を始める</div>
                 </div>
             </div>
@@ -66,12 +68,14 @@
                 <span class="nav-icon">👥</span>
                 <span class="nav-label">バディ追加</span>
             </a>
-            <a href="/workout/start" class="nav-item center-action">
-                <div class="nav-center-btn">
-                    <span class="center-icon">🏃</span>
-                </div>
+            <div class="nav-item center-action">
+                <form th:action="@{/workout/start-with-goal}" method="post" style="display: inline;">
+                    <button type="submit" class="nav-center-btn">
+                        <span class="center-icon">🏃</span>
+                    </button>
+                </form>
                 <span class="nav-label">運動を始める</span>
-            </a>
+            </div>
             <a href="/workout/records" class="nav-item">
                 <span class="nav-icon">📊</span>
                 <span class="nav-label">私の記録</span>

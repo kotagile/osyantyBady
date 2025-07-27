@@ -101,7 +101,10 @@ public class WorkoutRepository {
      * 運動記録を保存
      */
     public Workout save(Workout workout) {
-        if (workout.getWorkoutId() == null) {
+        // 既存の運動記録をチェック
+        Optional<Workout> existingWorkout = findById(workout.getWorkoutId());
+        
+        if (existingWorkout.isEmpty()) {
             // 新規作成
             String sql = "INSERT INTO workouts (workout_id, user_id, workout_date, start_time, end_time, duration_seconds, exercise_type, comment, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             jdbcTemplate.update(sql,

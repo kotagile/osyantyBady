@@ -38,20 +38,63 @@ document.addEventListener('DOMContentLoaded', function() {
 // Workout In-Progress Page
 document.addEventListener('DOMContentLoaded', function() {
     const timerElement = document.getElementById('timer');
-    const startTime = new Date();
     let timerInterval;
 
     function updateTimer() {
+        console.log('updateTimer called');
+        console.log('window.targetSessionTime:', window.targetSessionTime);
+        console.log('window.startTimeStr:', window.startTimeStr);
+        
+        // 目標時間（分）を秒に変換
+        const targetSeconds = window.targetSessionTime * 60;
+        console.log('targetSeconds:', targetSeconds);
+        
+        // 開始時刻から経過時間を計算
+        const startTime = new Date(window.startTimeStr);
         const now = new Date();
-        const elapsed = Math.floor((now - startTime) / 1000);
-        const minutes = Math.floor(elapsed / 60);
-        const seconds = elapsed % 60;
-        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        console.log('startTime:', startTime);
+        console.log('now:', now);
+        
+        const elapsedSeconds = Math.floor((now - startTime) / 1000);
+        console.log('elapsedSeconds:', elapsedSeconds);
+        
+        // 残り時間を計算
+        const remainingSeconds = Math.max(0, targetSeconds - elapsedSeconds);
+        console.log('remainingSeconds:', remainingSeconds);
+        
+        // 残り時間が0以下の場合は0を表示
+        if (remainingSeconds <= 0) {
+            timerElement.textContent = '00:00';
+            timerElement.style.color = '#e74c3c'; // 赤色で表示
+            return;
+        }
+        
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = remainingSeconds % 60;
+        const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        console.log('timeString:', timeString);
+        timerElement.textContent = timeString;
+        
+        // 残り時間が少なくなったら色を変更
+        if (remainingSeconds <= 60) { // 1分以下
+            timerElement.style.color = '#e74c3c'; // 赤色
+        } else if (remainingSeconds <= 300) { // 5分以下
+            timerElement.style.color = '#f39c12'; // オレンジ色
+        } else {
+            timerElement.style.color = '#C49A47'; // 通常のゴールド色
+        }
     }
 
-    if (timerElement) {
+    if (timerElement && window.targetSessionTime && window.startTimeStr) {
+        console.log('Timer initialization started');
         updateTimer();
         timerInterval = setInterval(updateTimer, 1000);
+        console.log('Timer interval set');
+    } else {
+        console.log('Timer initialization failed:');
+        console.log('timerElement:', timerElement);
+        console.log('window.targetSessionTime:', window.targetSessionTime);
+        console.log('window.startTimeStr:', window.startTimeStr);
     }
 
     // Cleanup on page unload

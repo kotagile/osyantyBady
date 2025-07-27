@@ -55,7 +55,8 @@ public class WorkoutService {
         
         // 運動開始
         Workout workout = new Workout();
-        workout.setWorkoutId(UUID.randomUUID().toString());
+        String workoutId = UUID.randomUUID().toString();
+        workout.setWorkoutId(workoutId);
         workout.setUserId(userId);
         workout.setWorkoutDate(LocalDate.now());
         workout.setStartTime(LocalDateTime.now());
@@ -63,7 +64,8 @@ public class WorkoutService {
         workout.setStatus("in_progress");
         workout.setCreatedAt(LocalDateTime.now());
         
-        return workoutRepository.save(workout);
+        Workout savedWorkout = workoutRepository.save(workout);
+        return savedWorkout;
     }
     
     /**
@@ -73,6 +75,15 @@ public class WorkoutService {
         UserGoal activeGoal = userGoalRepository.findActiveGoalByUserId(userId)
             .orElseThrow(() -> new RuntimeException("アクティブな目標が設定されていません"));
         return activeGoal.getSessionTimeMinutes();
+    }
+    
+    /**
+     * ユーザーの目標運動種別を取得
+     */
+    public String getUserTargetExerciseType(String userId) {
+        UserGoal activeGoal = userGoalRepository.findActiveGoalByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("アクティブな目標が設定されていません"));
+        return activeGoal.getExerciseType();
     }
     
     /**
@@ -220,7 +231,20 @@ public class WorkoutService {
         try {
             Workout workout = startWorkout(userId, exerciseType);
             return new StartWorkoutResult(true, workout.getWorkoutId(), null);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
+            return new StartWorkoutResult(false, null, e.getMessage());
+        }
+    }
+    
+    /**
+     * 目標の運動種別で運動を開始
+     */
+    public StartWorkoutResult tryStartWorkoutWithGoal(String userId) {
+        try {
+            String exerciseType = getUserTargetExerciseType(userId);
+            Workout workout = startWorkout(userId, exerciseType);
+            return new StartWorkoutResult(true, workout.getWorkoutId(), null);
+        } catch (Exception e) {
             return new StartWorkoutResult(false, null, e.getMessage());
         }
     }
@@ -246,13 +270,19 @@ public class WorkoutService {
     public InProgressResult getInProgressData(String userId, String workoutId) {
         try {
             Workout workout = getWorkout(workoutId).orElse(null);
-            if (workout == null || !workout.isInProgress()) {
+            if (workout == null) {
                 return new InProgressResult(false, null, 0, "");
             }
+            if (!workout.isInProgress()) {
+                return new InProgressResult(false, null, 0, "");
+            }
+            
             int targetSessionTime = getUserTargetSessionTime(userId);
             String userName = userRepository.findById(userId).map(User::getUserName).orElse("");
+            
             return new InProgressResult(true, workout, targetSessionTime, userName);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             return new InProgressResult(false, null, 0, "");
         }
     }

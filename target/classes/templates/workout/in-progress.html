@@ -24,7 +24,7 @@
                 
                 <div class="timer-display">
                     <div id="timer" class="timer">00:00</div>
-                    <div class="timer-label">経過時間</div>
+                    <div class="timer-label">残り時間</div>
                 </div>
                 
                 <div class="progress-info">
@@ -33,6 +33,14 @@
                     <p><strong>開始時刻:</strong> <span th:text="${#temporals.format(workout.startTime, 'HH:mm')}">10:00</span></p>
                     <p><strong>目標時間:</strong> <span th:text="${targetSessionTime}">30</span>分</p>
                 </div>
+                
+                <!-- 目標時間をJavaScriptに渡す -->
+                <script th:inline="javascript">
+                    window.targetSessionTime = /*[[${targetSessionTime}]]*/ 30;
+                    window.startTimeStr = /*[[${#temporals.format(workout.startTime, 'yyyy-MM-dd HH:mm:ss')}]]*/ '';
+                    console.log('targetSessionTime:', window.targetSessionTime);
+                    console.log('startTimeStr:', window.startTimeStr);
+                </script>
                 
                 <button class="complete-workout-btn" onclick="window.location.href='/workout/complete'">
                     運動完了
@@ -52,12 +60,14 @@
                 <span class="nav-icon">👥</span>
                 <span class="nav-label">バディ追加</span>
             </a>
-            <a href="/workout/start" class="nav-item center-action active">
-                <div class="nav-center-btn">
-                    <span class="center-icon">🏃</span>
-                </div>
+            <div class="nav-item center-action active">
+                <form th:action="@{/workout/start-with-goal}" method="post" style="display: inline;">
+                    <button type="submit" class="nav-center-btn">
+                        <span class="center-icon">🏃</span>
+                    </button>
+                </form>
                 <span class="nav-label">運動を始める</span>
-            </a>
+            </div>
             <a href="/workout/records" class="nav-item">
                 <span class="nav-icon">📊</span>
                 <span class="nav-label">私の記録</span>

@@ -53,15 +53,37 @@ public class WorkoutController {
             return "redirect:/workout/start";
         }
     }
+    
+    /**
+     * 目標の運動種別で直接運動を開始
+     */
+    @PostMapping("/start-with-goal")
+    public String startWorkoutWithGoal(HttpSession session, RedirectAttributes redirectAttributes) {
+        String userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        WorkoutService.StartWorkoutResult result = workoutService.tryStartWorkoutWithGoal(userId);
+        if (result.isSuccess()) {
+            session.setAttribute("currentWorkoutId", result.getWorkoutId());
+            return "redirect:/workout/in-progress";
+        } else {
+            redirectAttributes.addFlashAttribute("error", result.getError());
+            return "redirect:/goal/set";
+        }
+    }
 
     @GetMapping("/in-progress")
     public String showWorkoutInProgress(Model model, HttpSession session) {
         String userId = SecurityUtil.getCurrentUserId();
         String workoutId = (String) session.getAttribute("currentWorkoutId");
+        
         if (userId == null || workoutId == null) {
             return "redirect:/";
         }
+        
         WorkoutService.InProgressResult result = workoutService.getInProgressData(userId, workoutId);
+        
         if (result.isValid()) {
             model.addAttribute("workout", result.getWorkout());
             model.addAttribute("targetSessionTime", result.getTargetSessionTime());
