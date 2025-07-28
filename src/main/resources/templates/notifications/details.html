@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通知詳細</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/notification.css}">
+</head>
+<body>
+    <div class="home-container">
+        <div class="notification-container">
+            <!-- ヘッダー -->
+            <div class="header">
+                <h1 class="page-title">通知詳細</h1>
+                <div class="header-actions">
+                    <a href="/notifications" class="back-btn">← 戻る</a>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="notification-detail">
+                    <div class="notification-detail-header">
+                        <div class="notification-detail-info">
+                            <h2 class="notification-detail-title" th:text="${notification.title}">通知タイトル</h2>
+                            <span class="notification-detail-time" th:text="${#temporals.format(notification.createdAt, 'yyyy/MM/dd HH:mm')}">2024/12/25 10:30</span>
+                        </div>
+                        <span th:if="${notification.notificationType != null}" 
+                              th:class="${'notification-type-badge ' + notification.notificationType}" 
+                              th:text="${getNotificationTypeLabel(notification.notificationType)}">通知種別</span>
+                    </div>
+                    
+                    <div class="notification-detail-content">
+                        <p class="notification-detail-message" th:text="${notification.message}">通知メッセージ</p>
+                        
+                        <!-- 通知種別に応じた詳細情報 -->
+                        <div th:if="${notification.notificationType == 'workout_completed'}" class="notification-detail-actions">
+                            <h3>運動詳細</h3>
+                            <div class="workout-info">
+                                <p>運動種別: <span th:text="${notification.relatedData}">ランニング</span></p>
+                                <button class="action-btn view-workout-btn" th:attr="data-workout-id=${notification.relatedData}">
+                                    運動詳細を見る
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${notification.notificationType == 'buddy_request'}" class="notification-detail-actions">
+                            <h3>バディリクエスト</h3>
+                            <div class="buddy-request-info">
+                                <p>送信者: <span th:text="${notification.fromUser.userName}">ユーザー名</span></p>
+                                <div class="buddy-request-actions">
+                                    <button class="action-btn accept-buddy-btn" th:attr="data-requester-id=${notification.fromUserId}">
+                                        承認する
+                                    </button>
+                                    <button class="action-btn reject-buddy-btn" th:attr="data-requester-id=${notification.fromUserId}">
+                                        拒否する
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${notification.notificationType == 'reaction'}" class="notification-detail-actions">
+                            <h3>リアクション</h3>
+                            <div class="reaction-info">
+                                <p>送信者: <span th:text="${notification.fromUser.userName}">ユーザー名</span></p>
+                                <p>リアクション種別: <span th:text="${notification.relatedData}">いいね</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-detail-footer">
+                        <button class="delete-notification-btn" th:attr="data-notification-id=${notification.notificationId}">
+                            通知を削除
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ボトムナビゲーション -->
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">ホーム</span>
+            </a>
+            <a href="/buddy/search" class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">バディ追加</span>
+            </a>
+            <div class="nav-item center-action">
+                <form th:action="@{/workout/start-with-goal}" method="post" style="display: inline;">
+                    <button type="submit" class="nav-center-btn">
+                        <span class="center-icon">🏃</span>
+                    </button>
+                </form>
+                <span class="nav-label">運動を始める</span>
+            </div>
+            <a href="/workout/records" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">私の記録</span>
+            </a>
+            <a href="/goal/set" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">目標設定</span>
+            </a>
+        </div>
+    </nav>
+    
+    <script th:src="@{/js/notification.js}"></script>
+    <script>
+        // 通知削除ボタンのイベントリスナー
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteBtn = document.querySelector('.delete-notification-btn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('この通知を削除しますか？')) {
+                        const notificationId = this.getAttribute('data-notification-id');
+                        deleteNotification(notificationId);
+                    }
+                });
+            }
+        });
+
+        function deleteNotification(notificationId) {
+            fetch('/notifications/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `notificationId=${notificationId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('通知を削除しました', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/notifications';
+                    }, 1000);
+                } else {
+                    showMessage(data.message || 'エラーが発生しました', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting notification:', error);
+                showMessage('エラーが発生しました', 'error');
+            });
+        }
+    </script>
+</body>
+</html> 
