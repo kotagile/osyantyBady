@@ -9,35 +9,55 @@
 </head>
 <body>
     <div class="home-container">
-        <!-- ヘッダー -->
-        <div class="header">
-            <h1 class="page-title">通知履歴</h1>
-            <a href="/notifications" class="notification-bell">
-                <span class="bell-icon">🔔</span>
-                <span th:if="${unreadNotificationCount > 0}" class="notification-badge" th:text="${unreadNotificationCount}">3</span>
-            </a>
-        </div>
-        
-        <div class="main-content">
-            <div class="notification-list">
-                <div th:if="${notifications.empty}" class="empty-notifications">
-                    <p>通知履歴はありません</p>
+        <div class="notification-history-container">
+            <!-- ヘッダー -->
+            <div class="header">
+                <h1 class="page-title">通知履歴</h1>
+                <div class="header-actions">
+                    <span class="unread-count" th:if="${unreadNotificationCount > 0}" th:text="${unreadNotificationCount}">0</span>
+                    <a href="/notifications" class="back-btn">← 戻る</a>
                 </div>
-                
-                <div th:each="notification : ${notifications}" 
-                     th:class="${notification.isRead ? 'notification-item' : 'notification-item unread'}"
-                     th:attr="data-notification-id=${notification.notificationId}"
-                     class="notification-item">
-                    
-                    <div class="notification-header-row">
-                        <h3 class="notification-title-text" th:text="${notification.title}">通知タイトル</h3>
-                        <span class="notification-time" th:text="${#temporals.format(notification.createdAt, 'MM/dd HH:mm')}">12/25 10:30</span>
+            </div>
+            
+            <div class="main-content">
+                <div class="notification-list">
+                    <div th:if="${notifications.empty}" class="empty-notifications">
+                        <p>通知履歴はありません</p>
                     </div>
                     
-                    <p class="notification-message" th:text="${notification.message}">通知メッセージ</p>
-                    
-                    <span th:class="${'notification-type-badge ' + notification.notificationType}" 
-                          th:text="${getNotificationTypeLabel(notification.notificationType)}">通知種別</span>
+                    <div th:each="notification : ${notifications}" 
+                         th:class="${notification.isRead ? 'notification-item' : 'notification-item unread'}"
+                         th:attr="data-notification-id=${notification.notificationId}"
+                         class="notification-item">
+                        
+                        <div class="notification-header-row">
+                            <div class="notification-info">
+                                <h3 class="notification-title-text" th:text="${notification.title}">通知タイトル</h3>
+                                <span class="notification-time" th:text="${#temporals.format(notification.createdAt, 'yyyy/MM/dd HH:mm')}">2024/12/25 10:30</span>
+                            </div>
+                            <span th:if="${notification.notificationType != null}" 
+                                  th:class="${'notification-type-badge ' + notification.notificationType}" 
+                                  th:text="${getNotificationTypeLabel(notification.notificationType)}">通知種別</span>
+                        </div>
+                        
+                        <p class="notification-message" th:text="${notification.message}">通知メッセージ</p>
+                        
+                        <!-- 通知種別に応じたアクションボタン -->
+                        <div th:if="${notification.notificationType == 'workout_completed'}" class="notification-actions">
+                            <button class="action-btn view-workout-btn" th:attr="data-workout-id=${notification.relatedData}">
+                                運動詳細を見る
+                            </button>
+                        </div>
+                        
+                        <div th:if="${notification.notificationType == 'buddy_request'}" class="notification-actions">
+                            <button class="action-btn accept-buddy-btn" th:attr="data-requester-id=${notification.fromUserId}">
+                                承認する
+                            </button>
+                            <button class="action-btn reject-buddy-btn" th:attr="data-requester-id=${notification.fromUserId}">
+                                拒否する
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
