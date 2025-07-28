@@ -584,11 +584,11 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 ```
 main (本番環境)
 ├── develop (開発環境)
-│   ├── feature/user-auth (sekiya担当)
-│   ├── feature/workout-management (fujii担当)
-│   ├── feature/buddy-system (takahashi担当)
-│   ├── feature/goal-setting (doi担当)
-│   └── feature/notification (nagahama担当)
+│   ├── sekiya (sekiya担当)
+│   ├── fujii (fujii担当)
+│   ├── takahashi (takahashi担当)
+│   ├── doi (doi担当)
+│   └── nagahama (nagahama担当)
 ├── hotfix/urgent-fix
 └── release/v1.0.0
 ```
@@ -599,9 +599,9 @@ main (本番環境)
 - `main`: 本番環境用ブランチ（直接コミット禁止）
 - `develop`: 開発環境用ブランチ（統合テスト用）
 
-#### 機能ブランチ
-- `feature/機能名-担当者名`: 新機能開発用
-- 例: `feature/user-auth-sekiya`, `feature/workout-management-fujii`
+#### 作業者ブランチ
+- `担当者名`: 各作業者の開発用ブランチ
+- 例: `sekiya`, `fujii`, `takahashi`, `doi`, `nagahama`
 
 #### 修正ブランチ
 - `hotfix/修正内容`: 緊急修正用
@@ -613,28 +613,28 @@ main (本番環境)
 
 ### 開発フロー
 
-#### 1. 機能開発フロー
+#### 1. 作業者開発フロー
 ```bash
-# 1. developブランチから機能ブランチを作成
+# 1. developブランチから作業者ブランチを作成
 git checkout develop
 git pull origin develop
-git checkout -b feature/機能名-担当者名
+git checkout -b 担当者名
 
 # 2. 開発作業
 # ... コーディング ...
 
 # 3. コミット（日本語で分かりやすく）
 git add .
-git commit -m "feat: ユーザー認証機能を追加 (sekiya)"
+git commit -m "feat: ユーザー認証機能を追加"
 
 # 4. developブランチにマージ
 git checkout develop
 git pull origin develop
-git merge feature/機能名-担当者名
+git merge 担当者名
 git push origin develop
 
-# 5. 機能ブランチを削除
-git branch -d feature/機能名-担当者名
+# 5. 作業者ブランチは保持（継続開発用）
+git checkout 担当者名
 ```
 
 #### 2. リリースフロー
@@ -745,16 +745,16 @@ git branch -d hotfix/urgent-fix
 
 #### 例
 ```bash
-git commit -m "feat: ユーザー認証機能を追加 (sekiya)"
-git commit -m "fix: ログイン時のパスワード検証バグを修正 (sekiya)"
-git commit -m "refactor: WorkoutServiceのメソッドを分割 (fujii)"
+git commit -m "feat: ユーザー認証機能を追加"
+git commit -m "fix: ログイン時のパスワード検証バグを修正"
+git commit -m "refactor: WorkoutServiceのメソッドを分割"
 git commit -m "docs: READMEにブランチ戦略を追加"
 ```
 
 ### プルリクエスト規約
 
 #### プルリクエスト作成時
-1. **タイトル**: `[担当者名] 機能名の実装`
+1. **タイトル**: `[担当者名] 実装内容の概要`
    - 例: `[sekiya] ユーザー認証機能の実装`
 
 2. **説明**: 以下の項目を含める
@@ -792,10 +792,10 @@ cd workout-buddy
 git checkout -b develop
 git push origin develop
 
-# 3. 各担当者が機能ブランチを作成
+# 3. 各担当者が作業者ブランチを作成
 git checkout develop
-git checkout -b feature/user-auth-sekiya
-git push origin feature/user-auth-sekiya
+git checkout -b sekiya
+git push origin sekiya
 ```
 
 #### 日常的な開発フロー
@@ -803,13 +803,13 @@ git push origin feature/user-auth-sekiya
 # 毎日の作業開始時
 git checkout develop
 git pull origin develop
-git checkout feature/自分の機能ブランチ
+git checkout 自分の作業者ブランチ
 git merge develop
 
 # 作業終了時
 git add .
-git commit -m "feat: 機能説明 (担当者名)"
-git push origin feature/自分の機能ブランチ
+git commit -m "feat: 機能説明"
+git push origin 自分の作業者ブランチ
 ```
 
 ### 品質管理
@@ -852,7 +852,7 @@ git commit -m "fix: コンフリクトを解決 (担当者名)"
 git stash
 
 # 正しいブランチに移動
-git checkout feature/正しいブランチ名
+git checkout 正しい作業者ブランチ名
 
 # 変更を復元
 git stash pop
