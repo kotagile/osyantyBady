@@ -230,20 +230,11 @@ com.benesse.workoutbuddy/
     └── SecurityUtil.java                # セキュリティユーティリティ
 ```
 
-### クラス図（主要クラス）
+## 🏗️ 機能別クラス図
+
+### 1. ユーザー認証・セキュリティ機能
 ```mermaid
 classDiagram
-    class WorkoutBuddyApplication {
-        +main(String[] args)
-    }
-    
-    class SecurityConfig {
-        -CustomUserDetailsService userDetailsService
-        -PasswordEncoder passwordEncoder
-        +filterChain(HttpSecurity http)
-        +authenticationManager(HttpSecurity http)
-    }
-    
     class AuthController {
         -UserService userService
         +showLogin(Model model)
@@ -253,18 +244,29 @@ classDiagram
         +logout()
     }
     
-    class HomeController {
-        -UserService userService
-        -WorkoutService workoutService
-        -GoalService goalService
-        +showHome(Model model)
+    class SecurityConfig {
+        -CustomUserDetailsService userDetailsService
+        -PasswordEncoder passwordEncoder
+        +filterChain(HttpSecurity http)
+        +authenticationManager(HttpSecurity http)
+    }
+    
+    class PasswordEncoderConfig {
+        +passwordEncoder() PasswordEncoder
     }
     
     class UserService {
         -UserRepository userRepository
+        -PasswordEncoder passwordEncoder
         +registerUser(UserRegistrationDto dto)
+        +authenticateUser(String userId, String password)
         +findByUserId(String userId)
         +getUserNameSafe(String userId)
+    }
+    
+    class CustomUserDetailsService {
+        -UserService userService
+        +loadUserByUsername(String username)
     }
     
     class UserRepository {
@@ -272,7 +274,7 @@ classDiagram
         +findByUserId(String userId)
         +save(User user)
         +findByUserIdExact(String userId)
-        +findAll()
+        +existsByUserId(String userId)
     }
     
     class User {
@@ -286,11 +288,310 @@ classDiagram
         +setters()
     }
     
-    WorkoutBuddyApplication --> SecurityConfig
+    class UserRegistrationDto {
+        -String userId
+        -String userName
+        -String password
+        -String confirmPassword
+        +validate()
+    }
+    
     AuthController --> UserService
-    HomeController --> UserService
+    SecurityConfig --> CustomUserDetailsService
+    CustomUserDetailsService --> UserService
     UserService --> UserRepository
+    UserService --> PasswordEncoderConfig
     UserRepository --> User
+    AuthController --> UserRegistrationDto
+```
+
+### 2. 運動管理機能
+```mermaid
+classDiagram
+    class WorkoutController {
+        -WorkoutService workoutService
+        +startWorkout(HttpSession session)
+        +showInProgress(String workoutId, Model model)
+        +completeWorkout(String workoutId)
+        +pauseWorkout(String workoutId)
+        +resumeWorkout(String workoutId)
+    }
+    
+    class WorkoutService {
+        -WorkoutRepository workoutRepository
+        -NotificationService notificationService
+        +startWorkout(String userId, String workoutType)
+        +completeWorkout(String workoutId, String comment)
+        +pauseWorkout(String workoutId)
+        +resumeWorkout(String workoutId)
+        +getWeeklyProgress(String userId)
+        +getWorkoutHistory(String userId)
+    }
+    
+    class WorkoutRepository {
+        -JdbcTemplate jdbcTemplate
+        +findByUserId(String userId)
+        +findByWorkoutId(String workoutId)
+        +save(Workout workout)
+        +findByUserIdAndDateRange(String userId, LocalDate start, LocalDate end)
+        +findOngoingWorkout(String userId)
+    }
+    
+    class Workout {
+        -Long id
+        -String userId
+        -String workoutType
+        -Integer durationMinutes
+        -Integer caloriesBurned
+        -String notes
+        -String status
+        -LocalDateTime startedAt
+        -LocalDateTime completedAt
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        +getters()
+        +setters()
+    }
+    
+    class WorkoutDto {
+        -String workoutId
+        -String userId
+        -String workoutType
+        -Integer durationMinutes
+        -String notes
+        -String status
+    }
+    
+    class WorkoutReaction {
+        -Long id
+        -Long workoutId
+        -String userId
+        -String reactionType
+        -LocalDateTime createdAt
+        +getters()
+        +setters()
+    }
+    
+    WorkoutController --> WorkoutService
+    WorkoutService --> WorkoutRepository
+    WorkoutService --> NotificationService
+    WorkoutRepository --> Workout
+    WorkoutRepository --> WorkoutReaction
+    WorkoutController --> WorkoutDto
+```
+
+### 3. バディシステム機能
+```mermaid
+classDiagram
+    class BuddyController {
+        -BuddyService buddyService
+        -UserService userService
+        +showBuddyList(Model model, HttpSession session)
+        +showBuddySearch(Model model)
+        +searchUser(String userId, HttpSession session)
+        +sendBuddyRequest(String requestedUserId, HttpSession session)
+        +acceptBuddyRequest(Long buddyId, HttpSession session)
+        +rejectBuddyRequest(Long buddyId, HttpSession session)
+    }
+    
+    class BuddyService {
+        -UserBuddyRepository userBuddyRepository
+        -UserRepository userRepository
+        -NotificationService notificationService
+        +sendBuddyRequest(String requesterId, String requestedId)
+        +acceptBuddyRequest(Long buddyId)
+        +rejectBuddyRequest(Long buddyId)
+        +getBuddyList(String userId)
+        +searchUser(String userId)
+        +getBuddyProgress(String userId)
+    }
+    
+    class UserBuddyRepository {
+        -JdbcTemplate jdbcTemplate
+        +findByRequesterId(String requesterId)
+        +findByRequestedId(String requestedId)
+        +findByRequesterIdAndRequestedId(String requesterId, String requestedId)
+        +save(UserBuddy userBuddy)
+        +findAcceptedBuddies(String userId)
+        +findPendingRequests(String userId)
+    }
+    
+    class UserBuddy {
+        -Long id
+        -String requesterId
+        -String requestedId
+        -String status
+        -LocalDateTime requestedAt
+        -LocalDateTime respondedAt
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        +getters()
+        +setters()
+    }
+    
+    BuddyController --> BuddyService
+    BuddyController --> UserService
+    BuddyService --> UserBuddyRepository
+    BuddyService --> UserRepository
+    BuddyService --> NotificationService
+    UserBuddyRepository --> UserBuddy
+```
+
+### 4. 目標設定機能
+```mermaid
+classDiagram
+    class GoalController {
+        -GoalService goalService
+        +showGoalSetting(Model model, HttpSession session)
+        +setGoal(GoalDto goalDto, HttpSession session)
+        +showGoalProgress(Model model, HttpSession session)
+    }
+    
+    class GoalService {
+        -UserGoalRepository userGoalRepository
+        -WorkoutService workoutService
+        +setGoal(String userId, GoalDto goalDto)
+        +getCurrentGoal(String userId)
+        +getGoalProgress(String userId)
+        +updateGoal(String userId, GoalDto goalDto)
+        +deleteGoal(String userId)
+    }
+    
+    class UserGoalRepository {
+        -JdbcTemplate jdbcTemplate
+        +findByUserId(String userId)
+        +findActiveGoalByUserId(String userId)
+        +save(UserGoal userGoal)
+        +findByUserIdAndIsActive(String userId, Boolean isActive)
+    }
+    
+    class UserGoal {
+        -Long id
+        -String userId
+        -String goalType
+        -Integer targetValue
+        -String unit
+        -LocalDateTime targetDate
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        -Boolean isActive
+        +getters()
+        +setters()
+    }
+    
+    class GoalDto {
+        -String goalType
+        -Integer targetValue
+        -String unit
+        -LocalDateTime targetDate
+        +validate()
+    }
+    
+    class ProgressDto {
+        -Integer currentCount
+        -Integer targetCount
+        -Integer percentage
+        -String message
+        -String userName
+        +isGoalAchieved()
+    }
+    
+    GoalController --> GoalService
+    GoalService --> UserGoalRepository
+    GoalService --> WorkoutService
+    UserGoalRepository --> UserGoal
+    GoalController --> GoalDto
+    GoalService --> ProgressDto
+```
+
+### 5. 通知システム機能
+```mermaid
+classDiagram
+    class NotificationController {
+        -NotificationService notificationService
+        +showNotifications(Model model, HttpSession session)
+        +showNotificationHistory(Model model, HttpSession session)
+        +markAsRead(Long notificationId, HttpSession session)
+        +checkNewNotifications(HttpSession session)
+    }
+    
+    class NotificationService {
+        -NotificationRepository notificationRepository
+        +createNotification(NotificationDto notificationDto)
+        +getNotifications(String userId)
+        +getNotificationHistory(String userId)
+        +markAsRead(Long notificationId)
+        +getUnreadCount(String userId)
+        +sendWorkoutCompletedNotification(String userId, Workout workout)
+        +sendBuddyRequestNotification(String fromUserId, String toUserId)
+    }
+    
+    class NotificationRepository {
+        -JdbcTemplate jdbcTemplate
+        +findByUserId(String userId)
+        +findUnreadByUserId(String userId)
+        +save(Notification notification)
+        +markAsRead(Long notificationId)
+        +countUnreadByUserId(String userId)
+    }
+    
+    class Notification {
+        -Long id
+        -String userId
+        -String type
+        -String message
+        -Boolean isRead
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        +getters()
+        +setters()
+    }
+    
+    class NotificationUtil {
+        +createWorkoutNotification(Workout workout)
+        +createBuddyRequestNotification(String fromUserId, String toUserId)
+        +formatNotificationMessage(String type, Map data)
+    }
+    
+    NotificationController --> NotificationService
+    NotificationService --> NotificationRepository
+    NotificationService --> NotificationUtil
+    NotificationRepository --> Notification
+```
+
+### 6. ホーム画面機能
+```mermaid
+classDiagram
+    class HomeController {
+        -UserService userService
+        -WorkoutService workoutService
+        -GoalService goalService
+        -NotificationService notificationService
+        +showHome(Model model, HttpSession session)
+        +getUserProgress(HttpSession session)
+        +getBuddyProgress(HttpSession session)
+    }
+    
+    class HomeService {
+        -WorkoutService workoutService
+        -GoalService goalService
+        -BuddyService buddyService
+        -NotificationService notificationService
+        +getHomeData(String userId)
+        +getWeeklyProgress(String userId)
+        +getBuddyActivities(String userId)
+        +getUnreadNotifications(String userId)
+    }
+    
+    HomeController --> HomeService
+    HomeController --> UserService
+    HomeController --> WorkoutService
+    HomeController --> GoalService
+    HomeController --> NotificationService
+    HomeService --> WorkoutService
+    HomeService --> GoalService
+    HomeService --> BuddyService
+    HomeService --> NotificationService
 ```
 
 ## 🎯 主要機能
