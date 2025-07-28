@@ -20,6 +20,16 @@ import com.benesse.workoutbuddy.util.SecurityUtil;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * 運動管理機能のコントローラー
+ * 
+ * <p>運動の開始、進行中、完了、記録表示などの機能を提供します。
+ * ユーザーの運動セッション管理とリアクション機能を担当します。</p>
+ * 
+ * @author nagahama
+ * @version 1.0
+ * @since 2024-01-01
+ */
 @Controller
 @RequestMapping("/workout")
 public class WorkoutController {
@@ -28,6 +38,16 @@ public class WorkoutController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 運動開始画面を表示
+     * 
+     * <p>ユーザーが運動を開始するための画面を表示します。
+     * 運動種別の選択や目標設定の確認ができます。</p>
+     * 
+     * @param model Spring MVCのモデル
+     * @param session HTTPセッション
+     * @return 運動開始画面のテンプレート名
+     */
     @GetMapping("/start")
     public String showWorkoutStart(Model model, HttpSession session) {
         String userId = SecurityUtil.getCurrentUserId();
@@ -38,6 +58,17 @@ public class WorkoutController {
         return "workout/start";
     }
 
+    /**
+     * 運動を開始
+     * 
+     * <p>指定された運動種別で運動セッションを開始します。
+     * 進行中の運動がある場合はエラーを返します。</p>
+     * 
+     * @param exerciseType 運動種別（例：ランニング、筋トレ）
+     * @param session HTTPセッション
+     * @param redirectAttributes リダイレクト時の属性
+     * @return リダイレクト先のURL
+     */
     @PostMapping("/start")
     public String startWorkout(@RequestParam String exerciseType, HttpSession session, RedirectAttributes redirectAttributes) {
         String userId = SecurityUtil.getCurrentUserId();
@@ -55,7 +86,14 @@ public class WorkoutController {
     }
     
     /**
-     * 目標の運動種別で直接運動を開始
+     * 目標の運動種別で運動を開始
+     * 
+     * <p>ユーザーが設定した目標の運動種別で運動を開始します。
+     * 目標が設定されていない場合はエラーを返します。</p>
+     * 
+     * @param session HTTPセッション
+     * @param redirectAttributes リダイレクト時の属性
+     * @return リダイレクト先のURL
      */
     @PostMapping("/start-with-goal")
     public String startWorkoutWithGoal(HttpSession session, RedirectAttributes redirectAttributes) {
@@ -73,6 +111,16 @@ public class WorkoutController {
         }
     }
 
+    /**
+     * 運動進行中画面を表示
+     * 
+     * <p>現在進行中の運動のタイマーと進捗を表示します。
+     * 運動の一時停止や完了の操作が可能です。</p>
+     * 
+     * @param model Spring MVCのモデル
+     * @param session HTTPセッション
+     * @return 運動進行中画面のテンプレート名
+     */
     @GetMapping("/in-progress")
     public String showWorkoutInProgress(Model model, HttpSession session) {
         String userId = SecurityUtil.getCurrentUserId();
@@ -94,6 +142,16 @@ public class WorkoutController {
         }
     }
 
+    /**
+     * 運動完了画面を表示
+     * 
+     * <p>運動完了後の結果表示とコメント入力画面を表示します。
+     * 運動時間や種別の確認ができます。</p>
+     * 
+     * @param model Spring MVCのモデル
+     * @param session HTTPセッション
+     * @return 運動完了画面のテンプレート名
+     */
     @GetMapping("/complete")
     public String showWorkoutComplete(Model model, HttpSession session) {
         String userId = SecurityUtil.getCurrentUserId();
@@ -111,6 +169,17 @@ public class WorkoutController {
         }
     }
 
+    /**
+     * 運動を完了
+     * 
+     * <p>進行中の運動を完了し、コメントと共に記録を保存します。
+     * バディへの通知も自動的に送信されます。</p>
+     * 
+     * @param comment 運動に関するコメント
+     * @param session HTTPセッション
+     * @param redirectAttributes リダイレクト時の属性
+     * @return リダイレクト先のURL
+     */
     @PostMapping("/complete")
     public String completeWorkout(@RequestParam String comment, HttpSession session, RedirectAttributes redirectAttributes) {
         String userId = SecurityUtil.getCurrentUserId();
@@ -129,6 +198,16 @@ public class WorkoutController {
         }
     }
 
+    /**
+     * 運動にリアクションを送信
+     * 
+     * <p>他のユーザーの運動記録に対してリアクション（いいね、素晴らしい等）を送信します。
+     * リアクション送信者には通知が送信されます。</p>
+     * 
+     * @param request リアクション情報を含むリクエストマップ
+     * @param session HTTPセッション
+     * @return リアクション送信結果のJSONレスポンス
+     */
     @PostMapping("/reaction")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> sendReaction(@RequestBody Map<String, Object> request, HttpSession session) {
@@ -140,6 +219,16 @@ public class WorkoutController {
         return ResponseEntity.ok(Map.of("success", result.isSuccess(), "message", result.getMessage()));
     }
 
+    /**
+     * 運動記録一覧画面を表示
+     * 
+     * <p>ユーザーの過去の運動記録を一覧表示します。
+     * 運動日、種別、時間、コメントを確認できます。</p>
+     * 
+     * @param model Spring MVCのモデル
+     * @param session HTTPセッション
+     * @return 運動記録一覧画面のテンプレート名
+     */
     @GetMapping("/records")
     public String showWorkoutRecords(Model model, HttpSession session) {
         String userId = SecurityUtil.getCurrentUserId();
