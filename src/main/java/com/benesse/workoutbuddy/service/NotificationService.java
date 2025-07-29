@@ -259,6 +259,15 @@ public class NotificationService {
         try {
             java.util.List<Notification> notifications = getNotifications(userId);
             java.util.List<Notification> newNotifications = getNewNotifications(userId);
+            
+            // nullのnotificationTypeをフィルタリング
+            notifications = notifications.stream()
+                .filter(n -> n.getNotificationType() != null)
+                .collect(java.util.stream.Collectors.toList());
+            newNotifications = newNotifications.stream()
+                .filter(n -> n.getNotificationType() != null)
+                .collect(java.util.stream.Collectors.toList());
+            
             return new NotificationsResult(notifications, newNotifications);
         } catch (RuntimeException e) {
             return new NotificationsResult(java.util.List.of(), java.util.List.of());
@@ -281,6 +290,12 @@ public class NotificationService {
         try {
             java.util.List<Notification> notifications = getNotifications(userId);
             int unreadCount = getUnreadCount(userId);
+            
+            // nullのnotificationTypeをフィルタリング
+            notifications = notifications.stream()
+                .filter(n -> n.getNotificationType() != null)
+                .collect(java.util.stream.Collectors.toList());
+            
             return new HistoryResult(notifications, unreadCount);
         } catch (RuntimeException e) {
             return new HistoryResult(java.util.List.of(), 0);
@@ -335,6 +350,64 @@ public class NotificationService {
             return new ActionResult(true, "全ての通知を既読にしました");
         } catch (Exception e) {
             return new ActionResult(false, e.getMessage());
+        }
+    }
+
+    public ActionResult tryDeleteNotification(String notificationId, String userId) {
+        try {
+            Notification notification = notificationRepository.findById(notificationId);
+            if (notification == null) {
+                return new ActionResult(false, "通知が見つかりません");
+            }
+            
+            if (!notification.getToUserId().equals(userId)) {
+                return new ActionResult(false, "この通知を削除する権限がありません");
+            }
+            
+            notificationRepository.delete(notification);
+            return new ActionResult(true, "通知を削除しました");
+        } catch (Exception e) {
+            return new ActionResult(false, e.getMessage());
+        }
+    }
+
+    // 通知詳細結果DTO
+    public static class NotificationDetailResult {
+        private final boolean success;
+        private final Notification notification;
+        private final String message;
+        
+        public NotificationDetailResult(boolean success, Notification notification, String message) {
+            this.success = success;
+            this.notification = notification;
+            this.message = message;
+        }
+        
+        public boolean isSuccess() { return success; }
+        public Notification getNotification() { return notification; }
+        public String getMessage() { return message; }
+    }
+
+    public NotificationDetailResult getNotificationDetails(String notificationId, String userId) {
+        try {
+            Notification notification = notificationRepository.findById(notificationId);
+            if (notification == null) {
+                return new NotificationDetailResult(false, null, "通知が見つかりません");
+            }
+            
+            if (!notification.getToUserId().equals(userId)) {
+                return new NotificationDetailResult(false, null, "この通知を表示する権限がありません");
+            }
+            
+            // 通知を既読にする
+            if (!notification.getIsRead()) {
+                notification.setIsRead(true);
+                notificationRepository.save(notification);
+            }
+            
+            return new NotificationDetailResult(true, notification, null);
+        } catch (Exception e) {
+            return new NotificationDetailResult(false, null, e.getMessage());
         }
     }
 } 

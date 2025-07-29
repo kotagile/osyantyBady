@@ -9,6 +9,10 @@ public class NotificationUtil {
      * 通知種別のラベルを取得
      */
     public static String getNotificationTypeLabel(String notificationType) {
+        if (notificationType == null) {
+            return "その他";
+        }
+        
         switch (notificationType) {
             case "workout_completed":
                 return "運動完了";
@@ -27,6 +31,10 @@ public class NotificationUtil {
      * 通知種別のアイコンを取得
      */
     public static String getNotificationTypeIcon(String notificationType) {
+        if (notificationType == null) {
+            return "🔔";
+        }
+        
         switch (notificationType) {
             case "workout_completed":
                 return "🏃‍♂️";
