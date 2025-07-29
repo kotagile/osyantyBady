@@ -1,16 +1,17 @@
 package com.benesse.workoutbuddy.repository;
 
-import com.benesse.workoutbuddy.entity.UserGoal;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import com.benesse.workoutbuddy.entity.UserGoal;
 
 /**
  * ユーザー目標リポジトリ（JdbcTemplate版）
@@ -37,6 +38,17 @@ public class UserGoalRepository {
             return goal;
         }
     };
+    
+//  登録済みだった最新目標の論理削除するメソッド
+//  ユーザーIDのそれまでの目標データを非アクティブ化（最新のもののみ抽出はしてないので要相談）  
+    
+    public void changeActiveStatus (String userId) {
+    	String sql = "update user_goal set is_active = False where user_id = ?";
+    	jdbcTemplate.update(sql,userId);
+    }
+    
+//    
+    
     
     /**
      * ユーザーIDでアクティブな目標を取得
