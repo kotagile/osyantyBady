@@ -1,9 +1,7 @@
 /* ホーム画面専用スタイル */
 .home-container {
     width: 420px;
-    margin: 0 auto;
-    padding: 0 0 80px 0;
-    min-height: 100vh;
+    margin: 80px auto 0;
     background: #fafafa;
 }
 
@@ -59,18 +57,64 @@
     margin-bottom: 20px;
     color: #fff;
     position: relative;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.goal-area{
+	background: #e9d7B9;
+	border-radius: 18px;
+	padding: 25px;
+	margin-bottom: 20px;
+}
+
+.goal-text{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.goal-text p{
+	color: #916500;
+	padding-right: 10px;
+}
+
+
+.goal-text img{
+	width: 15px;
+	height: 15px;
+	transition: 0.5s ease;
+}
+
+.goal-content{
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.5s ease;
+	color: #916500;
+	text-align: center;
+}
+
+.goal-content.open{
+	max-height: 500px;
+}
+
+.goal-content p{
+	padding: 2px 0;
+}
+
+.goal-title {
+    font-size: 18px;
+    color: #fff;
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 8px;
+    align-items: flex-end;
+    margin-bottom: 12px;
 }
 
-.goal-title {
-    font-size: 1.1rem;
+.card-title {
+    font-size: 18px;
     font-weight: 600;
     margin: 0;
     color: #fff;
@@ -82,18 +126,14 @@
     color: #fff;
 }
 
-.card-subtitle {
-    font-size: 1rem;
-    color: #ccc;
-    margin-bottom: 20px;
-}
+
 
 .progress-bar {
     width: 100%;
     height: 12px;
     background: #666;
     border-radius: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     position: relative;
     overflow: hidden;
 }
@@ -109,15 +149,15 @@
 }
 
 .progress-message {
-    font-size: 0.95rem;
-    color: #ffe6b8;
+    font-size: 14px;
+    color: #fff;
     margin-bottom: 20px;
     line-height: 1.4;
 }
 
 /* 運動開始エリア */
 .start-exercise-area {
-    background: #e6d3ad;
+    background: #e9d7B9;
     border-radius: 18px;
     padding: 25px 0;
     display: flex;
@@ -127,21 +167,31 @@
 }
 
 .start-exercise-btn {
-    background: #C49A47;
+    background: #d0a33c;
     color: #fff;
     border: none;
     border-radius: 50%;
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
     margin-bottom: 10px;
-    box-shadow: 0 2px 8px rgba(196,154,71,0.2);
     cursor: pointer;
     transition: all 0.2s;
     text-decoration: none;
+    box-shadow: 0px 5px 8px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.start-exercise-btn img{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 50px;
+	height: 50px;
 }
 
 .start-exercise-btn:hover {
@@ -154,9 +204,8 @@
 }
 
 .start-exercise-label {
-    color: #7a5a1a;
+    color: #916500;
     font-size: 1rem;
-    font-weight: 500;
 }
 
 /* ボトムナビゲーション */

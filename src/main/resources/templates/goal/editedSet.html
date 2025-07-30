@@ -8,7 +8,7 @@
 </head>
 <body>
     <section class="goal">
-        <form  th:action="@{/goal}" th:object="${goalDto}" method="post">
+        <form  th:action="@{/goal/set}" th:object="${goalDto}" method="post">
             <div class="label-item">
                 <label for="exerciseType">運動種別</label>
                 <select th:field="*{exerciseType}">

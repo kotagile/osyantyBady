@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.benesse.workoutbuddy.service.WorkoutService;
-import com.benesse.workoutbuddy.util.SecurityUtil;
-
-import jakarta.servlet.http.HttpSession;
 
 /**
  * 運動管理機能のコントローラー
@@ -42,13 +39,12 @@ public class WorkoutController {
      * <p>ユーザーが設定した目標の運動種別で運動を開始します。
      * 目標が設定されていない場合はエラーを返します。</p>
      * 
-     * @param session HTTPセッション
      * @param redirectAttributes リダイレクト時の属性
      * @return リダイレクト先のURL
      */
     @PostMapping("/start-with-goal")
     public String startWorkoutWithGoal(RedirectAttributes redirectAttributes) {
-        String userId = "1234567890";
+        String userId = "123456";
 
         WorkoutService.StartWorkoutResult result = workoutService.tryStartWorkoutWithGoal(userId);
         if (result.isSuccess()) {
@@ -56,7 +52,6 @@ public class WorkoutController {
         } else {
             redirectAttributes.addFlashAttribute("error", result.getError());
             return "redirect:/goal/set";
-            
         }
     }
 
@@ -67,13 +62,11 @@ public class WorkoutController {
      * 運動の一時停止や完了の操作が可能です。</p>
      * 
      * @param model Spring MVCのモデル
-     * @param session HTTPセッション
      * @return 運動進行中画面のテンプレート名
      */
     @GetMapping("/in-progress")
     public String showWorkoutInProgress(Model model) {
-        String userId = "1234567890";
-        
+        String userId = "123456";
         
         // userIdから進行中の運動データを取得するように変更
         WorkoutService.InProgressResult result = workoutService.getInProgressData(userId);
@@ -94,13 +87,13 @@ public class WorkoutController {
      * <p>運動完了後の結果表示とコメント入力画面を表示します。
      * 運動時間や種別の確認ができます。</p>
      * 
+     * @param workoutId 運動ID
      * @param model Spring MVCのモデル
-     * @param session HTTPセッション
      * @return 運動完了画面のテンプレート名
      */
     @GetMapping("/complete")
     public String showWorkoutComplete(@RequestParam String workoutId, Model model) {
-        String userId = "1234567890";
+        String userId = "123456";
         if (userId == null || workoutId == null) {
             return "redirect:/";
         }
@@ -120,18 +113,18 @@ public class WorkoutController {
      * <p>進行中の運動を完了し、コメントと共に記録を保存します。
      * バディへの通知も自動的に送信されます。</p>
      * 
+     * @param workoutId 運動ID
      * @param comment 運動に関するコメント
-     * @param session HTTPセッション
      * @param redirectAttributes リダイレクト時の属性
      * @return リダイレクト先のURL
      */
     @PostMapping("/complete")
     public String completeWorkout(@RequestParam String workoutId, @RequestParam String comment, RedirectAttributes redirectAttributes) {
-        String userId = "1234567890";
+        String userId = "123456";
         if (userId == null || workoutId == null) {
             return "redirect:/";
         }
-//        通知機能は後ほど追加
+        //通知機能は後ほど追加
         WorkoutService.CompleteWorkoutResult result = workoutService.tryCompleteWorkout(userId, workoutId, comment);
         if (result.isSuccess()) {
             redirectAttributes.addFlashAttribute("success", "運動完了！お疲れさまでした！");
@@ -149,16 +142,13 @@ public class WorkoutController {
      * リアクション送信者には通知が送信されます。</p>
      * 
      * @param request リアクション情報を含むリクエストマップ
-     * @param session HTTPセッション
      * @return リアクション送信結果のJSONレスポンス
      */
     @PostMapping("/reaction")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> sendReaction(@RequestBody Map<String, Object> request, HttpSession session) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return ResponseEntity.ok(Map.of("success", false, "message", "ログインが必要です"));
-        }
+    public ResponseEntity<Map<String, Object>> sendReaction(@RequestBody Map<String, Object> request) {
+        String userId = "123456";
+       
         WorkoutService.ReactionResult result = workoutService.tryAddReaction(userId, request);
         return ResponseEntity.ok(Map.of("success", result.isSuccess(), "message", result.getMessage()));
     }
@@ -170,15 +160,12 @@ public class WorkoutController {
      * 運動日、種別、時間、コメントを確認できます。</p>
      * 
      * @param model Spring MVCのモデル
-     * @param session HTTPセッション
      * @return 運動記録一覧画面のテンプレート名
      */
     @GetMapping("/records")
-    public String showWorkoutRecords(Model model, HttpSession session) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return "redirect:/login";
-        }
+    public String showWorkoutRecords(Model model) {
+        String userId = "123456";
+
         WorkoutService.RecordsResult result = workoutService.getRecordsData(userId);
         model.addAttribute("workouts", result.getWorkouts());
         model.addAttribute("userName", result.getUserName());

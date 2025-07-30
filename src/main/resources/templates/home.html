@@ -1,74 +1,4 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>ホーム</title>-->
-<!--    <link rel="stylesheet" th:href="@{/css/reset.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/css/common.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/css/home.css}">-->
-<!--</head>-->
-<!--<body>-->
-	
-<!--	<section class="progress-section">-->
-<!--		<div class="user-goal-section">-->
-<!--			<p>あなたの目標</p>-->
-<!--			<div class="user-goal"></div>-->
-<!--		</div>-->
-<!--	　　<div class="user-progress">-->
-<!--			<div class="user-progress-flex">-->
-<!--				<p>あなたの週間進捗</p>-->
-<!--				<p>67%</p>-->
-<!--			</div>-->
-<!--			<div class="user-progress-bar"></div>-->
-<!--			<p class="user-progress-message">いつも頑張っててえらい。あともう少しで目標達成だよ！</p>-->
-<!--		</div>-->
-<!--		<div class="workout-section">-->
-<!--			<a class="workout-button" th:href="@{/sample/workout}">-->
-<!--				<img th:src="@{/img/workout-icon.png}">-->
-<!--			</a>-->
-<!--			<p>今すぐ運動を始める</p>-->
-<!--		</div>-->
-<!--	</section>-->
-	
-<!--	<section class="progress-section">-->
-<!--	　　<div class="user-progress">-->
-<!--			<div class="user-progress-flex">-->
-<!--				<p>あなたの週間進捗</p>-->
-<!--				<p>67%</p>-->
-<!--			</div>-->
-<!--			<div class="user-progress-bar"></div>-->
-<!--			<p class="user-progress-message">いつも頑張っててえらい。あともう少しで目標達成だよ！</p>-->
-<!--		</div>-->
-<!--	</section>-->
-	
-<!--	<nav class="bottom-nav">-->
-<!--		<div class="nav-container">-->
-<!--				<a th:href="@{/}" class="nav-item">-->
-<!--					<img class="nav-icon" th:src="@{/img/house-icon.png}">-->
-<!--					<p class="nav-label">ホーム</p>-->
-<!--				</a>-->
-<!--				<a th:href="@{/buddy}" class="nav-item">-->
-<!--					<img class="nav-icon" th:src="@{/img/buddy-icon.png}">-->
-<!--					<p class="nav-label">バディ追加</p>-->
-<!--				</a>-->
-<!--				<a th:href="@{/workout/in-progress}" class="nav-item">-->
-<!--					<img class="nav-icon" th:src="@{/img/workout-icon.png}">-->
-<!--					<p class="nav-label">運動を始める</p>-->
-<!--				</a>-->
-<!--				<a th:href="@{/record}" class="nav-item">-->
-<!--					<img class="nav-icon" th:src="@{/img/graph-icon.png}">-->
-<!--					<p class="nav-label">私の記録</p>-->
-<!--				</a>-->
-<!--				<a th:href="@{/goal/set}" class="nav-item">-->
-<!--					<img class="nav-icon" th:src="@{/img/goal-icon.png}">-->
-<!--					<p class="nav-label">目標設定</p>-->
-<!--				</a>-->
-<!--		</div>-->
-<!--	</nav>-->
-<!--    <script th:src="@{/js/home.js}"></script>-->
-<!--</body>-->
-<!--</html>-->
+
 
 
 <!DOCTYPE html>
@@ -78,40 +8,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ホーム</title>
     
-	<!--    GoogleFont-->
+    <!-- GoogleFont -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
-	
+    
     <div class="home-container">
         
         <div class="main-content">
             <div class="progress-card">
-				<div class="goal-area">
-					<div class="goal-text">
-						<p>あなたの目標</p>
-						<img th:src="@{/img/pulldown-before.png}" id="goalToggle">
-					</div>
-					<div class="goal-content" id="goalContent">
-						<p>ウォーキング20分</p>
-						<p>全体目標 : 2週間</p>
-						<p>週間目標 : 週2回</p>
-					</div>
-				</div>
+                <div class="goal-area">
+                    <div class="goal-text">
+                        <p>あなたの目標</p>
+                        <img th:src="@{/img/pulldown-before.png}" id="goalToggle">
+                    </div>
+                    <div class="goal-content" id="goalContent">
+                        <p>ウォーキング20分</p>
+                        <p>全体目標 : 2週間</p>
+                        <p>週間目標 : 週2回</p>
+                    </div>
+                </div>
                 <div class="card-header">
                     <h2 class="card-title">あなたの週間進捗</h2>
-                    <div class="progress-percentage" th:text="${progress.completedWorkouts} + '%'">67</div>
+                    <div class="progress-percentage" th:text="${progress != null ? progress.completedWorkouts : 0} + '%'">67</div>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" th:style="'width: ' + ${progress.completedWorkouts} + '%'"></div>
+                    <div class="progress-fill" th:style="'width: ' + ${progress != null ? progress.completedWorkouts : 0} + '%'"></div>
                 </div>
-                <div class="progress-message" th:text="${progress.userName}">いつも頑張っててえらい。あともう少しで目標達成だよ!</div>
+                <div class="progress-message" th:text="${progress != null ? progress.userName : 'いつも頑張っててえらい。あともう少しで目標達成だよ!'}">いつも頑張っててえらい。あともう少しで目標達成だよ!</div>
                 <div class="start-exercise-area">
                     <form th:action="@{/workout/start-with-goal}" method="post" style="display: inline;">
                         <button type="submit" class="start-exercise-btn">
@@ -122,9 +52,9 @@
                 </div>
             </div>
             
-<!--             バディ進捗カード -->
-            <div class="buddy-progress-card" th:if="${!buddyProgress.empty}">
-				<div class="goal-title">週間目標: 週<span th:text="${progress.goalFrequency}">4</span>回</div>
+            <!-- バディ進捗カード -->
+            <div class="buddy-progress-card" th:if="${buddyProgress != null && !buddyProgress.empty}">
+                <div class="goal-title">週間目標: 週<span th:text="${progress != null ? progress.goalFrequency : 4}">4</span>回</div>
                 <div class="card-header">
                     <h2 class="card-title">バディオの進捗</h2>
                     <div class="progress-percentage" th:text="${buddyProgress[0].totalWorkouts} + '%'">80</div>
@@ -138,33 +68,33 @@
         </div>
     </div>
     
-<!--     ボトムナビゲーション -->
+    <!-- ボトムナビゲーション -->
     <nav class="bottom-nav">
-		<div class="nav-container">
-				<a th:href="@{/}" class="nav-item">
-					<img class="nav-icon" th:src="@{/img/house-icon.png}">
-					<p class="nav-label">ホーム</p>
-				</a>
-				<a th:href="@{/buddy}" class="nav-item">
-					<img class="nav-icon" th:src="@{/img/buddy-icon.png}">
-					<p class="nav-label">バディ追加</p>
-				</a>
-				<a th:action="@{/workout/start-with-goal}" method="post" class="nav-item">
-					<div class="nav-icon-box">
-						<img class="nav-icon workout-nav-icon" th:src="@{/img/workout-icon.png}">
-					</div>
-					<p class="nav-label">運動を始める</p>
-				</a>
-				<a th:href="@{/record}" class="nav-item">
-					<img class="nav-icon" th:src="@{/img/graph-icon.png}">
-					<p class="nav-label">私の記録</p>
-				</a>
-				<a th:href="@{/goal/set}" class="nav-item">
-					<img class="nav-icon" th:src="@{/img/goal-icon.png}">
-					<p class="nav-label">目標設定</p>
-				</a>
-		</div>
-	</nav>
+        <div class="nav-container">
+            <a th:href="@{/}" class="nav-item">
+                <img class="nav-icon" th:src="@{/img/house-icon.png}">
+                <p class="nav-label">ホーム</p>
+            </a>
+            <a th:href="@{/buddy}" class="nav-item">
+                <img class="nav-icon" th:src="@{/img/buddy-icon.png}">
+                <p class="nav-label">バディ追加</p>
+            </a>
+            <a th:href="@{/workout/in-progress}" class="nav-item">
+                <div class="nav-icon-box">
+                    <img class="nav-icon workout-nav-icon" th:src="@{/img/workout-icon.png}">
+                </div>
+                <p class="nav-label">運動を始める</p>
+            </a>
+            <a th:href="@{/workout/records}" class="nav-item">
+                <img class="nav-icon" th:src="@{/img/graph-icon.png}">
+                <p class="nav-label">私の記録</p>
+            </a>
+            <a th:href="@{/goal/set}" class="nav-item">
+                <img class="nav-icon" th:src="@{/img/goal-icon.png}">
+                <p class="nav-label">目標設定</p>
+            </a>
+        </div>
+    </nav>
     
     <script th:src="@{/js/home.js}"></script>
 </body>

@@ -113,9 +113,20 @@ public class WorkoutService {
      * @throws RuntimeException アクティブな目標が設定されていない場合
      */
     public String getUserTargetExerciseType(String userId) {
-        UserGoal activeGoal = userGoalRepository.findActiveGoalByUserId(userId)
-            .orElseThrow(() -> new RuntimeException("アクティブな目標が設定されていません"));
-        return activeGoal.getExerciseType();
+        // まずfindActiveGoalByUserIdで検索（is_active = 1）
+        Optional<UserGoal> activeGoalOpt = userGoalRepository.findActiveGoalByUserId(userId);
+        
+        if (activeGoalOpt.isPresent()) {
+            return activeGoalOpt.get().getExerciseType();
+        }
+        
+        // 見つからない場合はgetLatestGoalでフォールバック（is_active = 'True'）
+        try {
+            UserGoal latestGoal = userGoalRepository.getLatestGoal(userId);
+            return latestGoal.getExerciseType();
+        } catch (Exception e) {
+            throw new RuntimeException("アクティブな目標が設定されていません");
+        }
     }
     
     /**
@@ -174,9 +185,20 @@ public class WorkoutService {
      */
     @Transactional(readOnly = true)
     public ProgressDto getWeeklyProgress(String userId) {
-        // 目標取得
-        UserGoal goal = userGoalRepository.findActiveGoalByUserId(userId)
-            .orElseThrow(() -> new RuntimeException("目標が設定されていません"));
+        // まずfindActiveGoalByUserIdで検索（is_active = 1）
+        Optional<UserGoal> activeGoalOpt = userGoalRepository.findActiveGoalByUserId(userId);
+        UserGoal goal;
+        
+        if (activeGoalOpt.isPresent()) {
+            goal = activeGoalOpt.get();
+        } else {
+            // 見つからない場合はgetLatestGoalでフォールバック（is_active = 'True'）
+            try {
+                goal = userGoalRepository.getLatestGoal(userId);
+            } catch (Exception e) {
+                throw new RuntimeException("目標が設定されていません");
+            }
+        }
         
         // 今週の期間計算
         LocalDate today = LocalDate.now();
@@ -325,6 +347,7 @@ public class WorkoutService {
         try {
             String exerciseType = getUserTargetExerciseType(userId);
             Workout workout = startWorkout(userId, exerciseType);
+
             return new StartWorkoutResult(true, workout.getWorkoutId(), null);
         } catch (Exception e) {
             return new StartWorkoutResult(false, null, e.getMessage());

@@ -9,19 +9,36 @@
 </head>
 <body>
 
-<form th:action="@{/buddy/add}" method="post">
-			<div class="search">
-                    <div class="form-group">
-                        <input type="text" class="form" name="searchId" 
-               placeholder="ユーザーIDを入力" th:value="${searchId}">
-                    </div>
-			</div>
-
-                <button type="submit">バディ追加</button>
+<!-- 検索フォーム -->
+<form th:action="@{/buddy/search}" method="GET">
+    <div class="search">
+        <div class="form-group">
+            <input type="text" class="form" name="searchTerm" 
+                   placeholder="ユーザーIDを入力" th:value="${searchTerm}">
+        </div>
+    </div>
+    <button type="submit">検索する</button>
 </form>
+
+<!-- 検索結果表示エリア -->
+<div th:if="${buddyList != null && !buddyList.empty}">
+    <h3>検索結果</h3>
+    <div th:each="buddy : ${buddyList}">
+        <p>ユーザーID: <span th:text="${buddy.userId}"></span></p>
+        <p>ユーザー名: <span th:text="${buddy.userName}"></span></p>
+        
+        <!-- バディ追加フォームを各ユーザーごとに配置 -->
+        <form th:action="@{/buddy/add}" method="post" style="display: inline;">
+            <input type="hidden" name="searchId" th:value="${buddy.userId}">
+            <button type="submit">バディ追加</button>
+        </form>
     </div>
 </div>
 
- 
+<!-- 成功メッセージ表示 -->
+<div th:if="${successMessage != null}" class="success-message">
+    <p th:text="${successMessage}"></p>
+</div>
+
 </body>
 </html> 

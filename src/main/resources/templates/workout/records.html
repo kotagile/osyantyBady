@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>運動記録</title>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/workout.css}">
+</head>
+<body>
+    <div class="records-container">
+        <h1>運動記録</h1>
+        
+        <div class="records-list" th:if="${workouts != null && !workouts.empty}">
+            <div th:each="workout : ${workouts}" class="record-item">
+                <div class="record-header">
+                    <span class="record-date" th:text="${#temporals.format(workout.workoutDate, 'yyyy/MM/dd')}">2024/01/01</span>
+                    <span class="record-type" th:text="${workout.workoutType}">ウォーキング</span>
+                </div>
+                <div class="record-details">
+                    <p class="record-duration" th:text="'運動時間: ' + ${workout.duration} + '分'">運動時間: 20分</p>
+                    <p class="record-comment" th:if="${workout.comment != null && !workout.comment.empty}" th:text="${workout.comment}">コメント</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="no-records" th:if="${workouts == null || workouts.empty}">
+            <p>まだ運動記録がありません。</p>
+            <p>運動を始めて記録を作成しましょう！</p>
+        </div>
+    </div>
+    
+    <!-- ボトムナビゲーション -->
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a th:href="@{/}" class="nav-item">
+                <img class="nav-icon" th:src="@{/img/house-icon.png}">
+                <p class="nav-label">ホーム</p>
+            </a>
+            <a th:href="@{/buddy}" class="nav-item">
+                <img class="nav-icon" th:src="@{/img/buddy-icon.png}">
+                <p class="nav-label">バディ追加</p>
+            </a>
+            <a th:href="@{/workout/in-progress}" class="nav-item">
+                <div class="nav-icon-box">
+                    <img class="nav-icon workout-nav-icon" th:src="@{/img/workout-icon.png}">
+                </div>
+                <p class="nav-label">運動を始める</p>
+            </a>
+            <a th:href="@{/workout/records}" class="nav-item">
+                <img class="nav-icon" th:src="@{/img/graph-icon.png}">
+                <p class="nav-label">私の記録</p>
+            </a>
+            <a th:href="@{/goal/set}" class="nav-item">
+                <img class="nav-icon" th:src="@{/img/goal-icon.png}">
+                <p class="nav-label">目標設定</p>
+            </a>
+        </div>
+    </nav>
+</body>
+</html> 

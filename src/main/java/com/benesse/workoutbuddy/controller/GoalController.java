@@ -5,16 +5,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import com.benesse.workoutbuddy.dto.EditedGoalDto;
 import com.benesse.workoutbuddy.service.GoalService;
-//各メソッドにセッションによるログイン状態の確認を追加する必要あり
+
 @Controller
-//@RequestMapping("/goal")
 public class GoalController {
 	@Autowired
 	private GoalService goalService;
 	
-	@GetMapping("/goal")
+	@GetMapping("goal/set")
 	/**目標設定画面表示コントローラーメソッド
 	 * @param model
 	 * @return 空の目標DTOを含んだ状態で目標設定htmlを表示
@@ -24,24 +24,23 @@ public class GoalController {
 		return "goal/editedSet";
 	}
 	
-	@PostMapping("/goal")
+	@PostMapping("goal/set")
 	/**目標設定DB挿入コントローラーメソッド
 	 * @param goalDto
 	 * @param bindingResult
 	 * @param model
 	 * @return
 	 */
-	//    本当は引数にセッションを入れてID特定に使う
 	public String setGoal(
 	        EditedGoalDto goalDto,
 	        BindingResult bindingResult,
 	        Model model) {
 		//    	セッションを後回しにするのでここでは仮のユーザーIDを設定
-		String userId = "1234567890";
+		String userId = "123456";
 		
 		//    	エラー時にリダイレクト
 		if (bindingResult.hasErrors()) {
-			return "redirect:goal/editedSet";
+			return "goal/editedSet";
 		}
 		
 		//    	セッションに格納されているID(DB内の過去目標論理削除用)と目標設定Dtoを受け取りながらサービスの目標設定メソッドたたき
@@ -50,14 +49,14 @@ public class GoalController {
 			goalService.setGoal(userId, goalDto);
 		} catch (Exception e) {
 			model.addAttribute("error", "エラーが発生しました。");
-			return "redirect:goal/editedSet";
+			return "goal/editedSet";
 		}
 		
-		//    	登録完了後はホーム画面遷移？（間違ってたらごめん）
+		//    	登録完了後はホーム画面遷移
 		return "home";
 	}
 	
-	@GetMapping("/goal/get")
+	@GetMapping("goal/get")
 	/**
 	 * 登録済みの最新目標の取得メソッド（とりあえず自分の目標のみ、バディの目標取得は別スプリントにて）
 	 * @param model
@@ -66,7 +65,7 @@ public class GoalController {
 	public String showLatestGoal(Model model) {
 		
 		//      本当は引数にセッションを入れてID特定に使う
-		String userId = "1234567890";
+		String userId = "123456";
 		
 		//DBからIDをもとに最新の目標を取得
 		EditedGoalDto latestGoal = goalService.getLatestGoal(userId);
@@ -74,5 +73,4 @@ public class GoalController {
 		
 		return "home";
 	}
-	
 }

@@ -42,7 +42,8 @@ public class GoalService {
 		userGoal.setSessionTimeMinutes(goalDto.getSessionTimeMinutes());
 		userGoal.setCreatedAt(LocalDateTime.now());
 		userGoal.setUpdatedAt(LocalDateTime.now());
-		userGoal.setIsActive(true);
+		// DB仕様に合わせてisActiveを1で保存（boolean型のままでもリポジトリで1/0に変換される想定）
+		userGoal.setIsActive(Boolean.TRUE); // ここはBoolean型のまま
 		userGoalRepository.save(userGoal);
 		
 	};
