@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.benesse.workoutbuddy.service.UserService;
 import com.benesse.workoutbuddy.service.WorkoutService;
 import com.benesse.workoutbuddy.util.SecurityUtil;
 
@@ -35,56 +34,8 @@ import jakarta.servlet.http.HttpSession;
 public class WorkoutController {
     @Autowired
     private WorkoutService workoutService;
-    @Autowired
-    private UserService userService;
-
-    /**
-     * 運動開始画面を表示
-     * 
-     * <p>ユーザーが運動を開始するための画面を表示します。
-     * 運動種別の選択や目標設定の確認ができます。</p>
-     * 
-     * @param model Spring MVCのモデル
-     * @param session HTTPセッション
-     * @return 運動開始画面のテンプレート名
-     */
-    @GetMapping("/start")
-    public String showWorkoutStart(Model model, HttpSession session) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("userName", userService.getUserNameSafe(userId));
-        return "workout/start";
-    }
-
-    /**
-     * 運動を開始
-     * 
-     * <p>指定された運動種別で運動セッションを開始します。
-     * 進行中の運動がある場合はエラーを返します。</p>
-     * 
-     * @param exerciseType 運動種別（例：ランニング、筋トレ）
-     * @param session HTTPセッション
-     * @param redirectAttributes リダイレクト時の属性
-     * @return リダイレクト先のURL
-     */
-    @PostMapping("/start")
-    public String startWorkout(@RequestParam String exerciseType, HttpSession session, RedirectAttributes redirectAttributes) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return "redirect:/login";
-        }
-        WorkoutService.StartWorkoutResult result = workoutService.tryStartWorkout(userId, exerciseType);
-        if (result.isSuccess()) {
-            session.setAttribute("currentWorkoutId", result.getWorkoutId());
-            return "redirect:/workout/in-progress";
-        } else {
-            redirectAttributes.addFlashAttribute("error", result.getError());
-            return "redirect:/workout/start";
-        }
-    }
     
+
     /**
      * 目標の運動種別で運動を開始
      * 
@@ -96,18 +47,16 @@ public class WorkoutController {
      * @return リダイレクト先のURL
      */
     @PostMapping("/start-with-goal")
-    public String startWorkoutWithGoal(HttpSession session, RedirectAttributes redirectAttributes) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return "redirect:/login";
-        }
+    public String startWorkoutWithGoal(RedirectAttributes redirectAttributes) {
+        String userId = "1234567890";
+
         WorkoutService.StartWorkoutResult result = workoutService.tryStartWorkoutWithGoal(userId);
         if (result.isSuccess()) {
-            session.setAttribute("currentWorkoutId", result.getWorkoutId());
             return "redirect:/workout/in-progress";
         } else {
             redirectAttributes.addFlashAttribute("error", result.getError());
             return "redirect:/goal/set";
+            
         }
     }
 
@@ -122,9 +71,9 @@ public class WorkoutController {
      * @return 運動進行中画面のテンプレート名
      */
     @GetMapping("/in-progress")
-    public String showWorkoutInProgress(Model model, HttpSession session) {
-        String userId = SecurityUtil.getCurrentUserId();
-        String workoutId = (String) session.getAttribute("currentWorkoutId");
+    public String showWorkoutInProgress(Model model) {
+        String userId = "1234567890";
+        String workoutId = "1234567890";
         
         if (userId == null || workoutId == null) {
             return "redirect:/";
@@ -153,9 +102,9 @@ public class WorkoutController {
      * @return 運動完了画面のテンプレート名
      */
     @GetMapping("/complete")
-    public String showWorkoutComplete(Model model, HttpSession session) {
-        String userId = SecurityUtil.getCurrentUserId();
-        String workoutId = (String) session.getAttribute("currentWorkoutId");
+    public String showWorkoutComplete(Model model) {
+        String userId = "1234567890";
+        String workoutId = "1234567890";
         if (userId == null || workoutId == null) {
             return "redirect:/";
         }
@@ -181,15 +130,15 @@ public class WorkoutController {
      * @return リダイレクト先のURL
      */
     @PostMapping("/complete")
-    public String completeWorkout(@RequestParam String comment, HttpSession session, RedirectAttributes redirectAttributes) {
-        String userId = SecurityUtil.getCurrentUserId();
-        String workoutId = (String) session.getAttribute("currentWorkoutId");
+    public String completeWorkout(@RequestParam String comment, RedirectAttributes redirectAttributes) {
+        String userId = "1234567890";
+        String workoutId = "1234567890";
         if (userId == null || workoutId == null) {
             return "redirect:/";
         }
+//        通知機能は後ほど追加
         WorkoutService.CompleteWorkoutResult result = workoutService.tryCompleteWorkout(userId, workoutId, comment);
         if (result.isSuccess()) {
-            session.removeAttribute("currentWorkoutId");
             redirectAttributes.addFlashAttribute("success", "運動完了！お疲れさまでした！");
             return "redirect:/";
         } else {

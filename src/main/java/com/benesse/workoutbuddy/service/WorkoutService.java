@@ -159,9 +159,6 @@ public class WorkoutService {
         
         Workout savedWorkout = workoutRepository.save(workout);
         
-        // バディ通知
-        notificationService.notifyWorkoutCompleted(workout.getUserId(), savedWorkout);
-        
         return savedWorkout;
     }
     
@@ -215,16 +212,6 @@ public class WorkoutService {
         return workoutRepository.findByUserIdOrderByWorkoutDateDesc(userId);
     }
     
-    /**
-     * 運動記録を取得
-     * 
-     * @param workoutId 運動ID
-     * @return 運動記録（存在しない場合は空）
-     */
-    @Transactional(readOnly = true)
-    public Optional<Workout> getWorkout(String workoutId) {
-        return workoutRepository.findById(workoutId);
-    }
     
     /**
      * ワークアウトIDでワークアウトを取得
@@ -385,7 +372,7 @@ public class WorkoutService {
      */
     public InProgressResult getInProgressData(String userId, String workoutId) {
         try {
-            Workout workout = getWorkout(workoutId).orElse(null);
+            Workout workout = findById(workoutId).orElse(null);
             if (workout == null) {
                 return new InProgressResult(false, null, 0, "");
             }
@@ -440,7 +427,7 @@ public class WorkoutService {
      */
     public CompleteResult getCompleteData(String userId, String workoutId) {
         try {
-            Workout workout = getWorkout(workoutId).orElse(null);
+            Workout workout = findById(workoutId).orElse(null);
             if (workout == null || !workout.isInProgress()) {
                 return new CompleteResult(false, null, "");
             }
