@@ -1,9 +1,12 @@
 package com.benesse.workoutbuddy.service;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -137,11 +140,24 @@ public class WorkoutService {
         LocalDate weekEnd = today.with(DayOfWeek.SUNDAY);
         
         // 今週の運動日数取得
-        int workoutDays = workoutRepository.countDistinctWorkoutDays(userId, weekStart, weekEnd);
+        Map<LocalDate, Duration> workoutData=summarizeWorkoutTimes(workoutRepository.findByUserIdAndDateRange(userId, weekStart, weekEnd));
+        int workoutDays = countDaysExceedingTarget(workoutData, goal.getSessionTimeMinutes());
+        
+        System.out.println(workoutDays+"ああああ");
+        for (Map.Entry<LocalDate, Duration> entry : workoutData.entrySet()) {
+            LocalDate date = entry.getKey();
+            Duration duration = entry.getValue();
+
+            System.out.println("日付: " + date + ", 合計時間: " + duration);
+        }
+        // 今週の運動日数取得
+//        int workoutDays = workoutRepository.countDistinctWorkoutDays(userId, weekStart, weekEnd);
         
         // 進捗率計算
         int targetFrequency = goal.getWeeklyFrequency();
         int progressPercentage = Math.min(100, (workoutDays * 100) / targetFrequency);
+        
+        System.out.println(progressPercentage);
         
         // 励ましメッセージ生成
         String encouragementMessage = generateEncouragementMessage(progressPercentage);
@@ -152,6 +168,59 @@ public class WorkoutService {
             progressPercentage,
             encouragementMessage
         );
+    }
+    
+    /**
+     * 与えられた Workout のリストから、日付ごとの合計運動時間を計算して返します。
+     * 
+     * @param workouts 運動のリスト（各 Workout は開始時刻、終了時刻、運動日を持つ）
+     * @return LocalDate をキー、Duration（その日の合計運動時間）を値とする Map
+     */
+    public static Map<LocalDate, Duration> summarizeWorkoutTimes(List<Workout> workouts) {
+        // 結果を格納するマップ。キー：日付、値：その日の合計運動時間
+        Map<LocalDate, Duration> result = new HashMap<>();
+
+        // すべての Workout を処理
+        for (Workout workout : workouts) {
+            // 運動の日付を取得
+            LocalDate date = workout.getWorkoutDate();
+
+            // 運動時間を計算（開始〜終了の差分）
+            Duration duration = Duration.between(workout.getStartTime(), workout.getEndTime());
+
+            // すでにその日の記録が存在する場合は加算、なければ新規登録
+            if (result.containsKey(date)) {
+                Duration updated = result.get(date).plus(duration); // 既存の時間に加算
+                result.put(date, updated); // 更新
+            } else {
+                result.put(date, duration); // 新規登録
+            }
+        }
+
+        return result;
+    }
+    
+    /**
+     * 与えられた運動記録の中で、目標時間（分）を超えた日数をカウントして返します。
+     *
+     * @param workoutDurations 各日の運動時間をまとめたマップ（キー：日付、値：Duration）
+     * @param targetMinutes 目標運動時間（単位：分）
+     * @return 目標時間を超えた日数
+     */
+    public static int countDaysExceedingTarget(Map<LocalDate, Duration> workoutDurations, int targetMinutes) {
+        int count = 0;
+
+        for (Map.Entry<LocalDate, Duration> entry : workoutDurations.entrySet()) {
+            Duration duration = entry.getValue();
+            int minutes = (int) duration.toMinutes();
+
+            // 目標を超えていればカウント
+            if (minutes > targetMinutes) {
+                count++;
+            }
+        }
+
+        return count;
     }
     
     /**

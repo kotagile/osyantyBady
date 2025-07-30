@@ -9,9 +9,6 @@ import com.benesse.workoutbuddy.service.BuddyService;
 import com.benesse.workoutbuddy.service.NotificationService;
 import com.benesse.workoutbuddy.service.UserService;
 import com.benesse.workoutbuddy.service.WorkoutService;
-import com.benesse.workoutbuddy.util.SecurityUtil;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
@@ -25,17 +22,19 @@ public class HomeController {
     private NotificationService notificationService;
 
     @GetMapping("/")
-    public String home(Model model, HttpSession session) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return "redirect:/login";
-        }
-        
+    public String home(Model model) {
+        String userId = "05201";
+        String buddyId="123456789";
+//        if (userId == null) {
+//            return "redirect:/login";
+//        }
+//        
         try {
             HomeService.HomeData result = new HomeService(userService, workoutService, buddyService, notificationService).getHomeData(userId);
             model.addAttribute("userName", result.getUserName());
-            model.addAttribute("progress", result.getProgress());
+            model.addAttribute("progress", workoutService.getWeeklyProgress(userId));
             model.addAttribute("buddyProgress", result.getBuddyProgress());
+            System.out.println(result.getBuddyProgress()+"バディ");
             model.addAttribute("unreadNotificationCount", result.getUnreadNotificationCount());
             return "home";
         } catch (Exception e) {
