@@ -367,15 +367,16 @@ public class WorkoutService {
      * 運動中画面のデータを取得
      * 
      * @param userId ユーザーID
-     * @param workoutId 運動ID
      * @return 運動中画面データ
      */
-    public InProgressResult getInProgressData(String userId, String workoutId) {
+    public InProgressResult getInProgressData(String userId) {
         try {
-            Workout workout = findById(workoutId).orElse(null);
-            if (workout == null) {
+            // workoutIdを使わず、userIdで進行中のworkoutを検索する
+            Optional<Workout> workoutOpt = getCurrentWorkout(userId);
+            if (workoutOpt.isEmpty()) {
                 return new InProgressResult(false, null, 0, "");
             }
+            Workout workout = workoutOpt.get();
             if (!workout.isInProgress()) {
                 return new InProgressResult(false, null, 0, "");
             }

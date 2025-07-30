@@ -73,15 +73,12 @@ public class WorkoutController {
     @GetMapping("/in-progress")
     public String showWorkoutInProgress(Model model) {
         String userId = "1234567890";
-        String workoutId = "1234567890";
         
-        if (userId == null || workoutId == null) {
-            return "redirect:/";
-        }
         
-        WorkoutService.InProgressResult result = workoutService.getInProgressData(userId, workoutId);
+        // userIdから進行中の運動データを取得するように変更
+        WorkoutService.InProgressResult result = workoutService.getInProgressData(userId);
         
-        if (result.isValid()) {
+        if (result.isValid() && result.getWorkout() != null) {
             model.addAttribute("workout", result.getWorkout());
             model.addAttribute("targetSessionTime", result.getTargetSessionTime());
             model.addAttribute("userName", result.getUserName());
