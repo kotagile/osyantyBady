@@ -48,7 +48,7 @@ public class WorkoutController {
      */
     @PostMapping("/start-with-goal")
     public String startWorkoutWithGoal(RedirectAttributes redirectAttributes) {
-        String userId = "bbbbbb";
+        String userId = "1234567890";
 
         WorkoutService.StartWorkoutResult result = workoutService.tryStartWorkoutWithGoal(userId);
         if (result.isSuccess()) {
