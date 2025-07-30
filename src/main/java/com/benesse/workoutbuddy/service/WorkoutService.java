@@ -139,31 +139,15 @@ public class WorkoutService {
         LocalDate weekStart = today.with(DayOfWeek.MONDAY);
         LocalDate weekEnd = today.with(DayOfWeek.SUNDAY);
         
-
-        System.out.println(workoutRepository.findByUserIdAndDateRange(userId, weekStart, weekEnd));
-        
         // 今週の運動日数取得
         Map<LocalDate, Duration> workoutData=summarizeWorkoutTimes(workoutRepository.findByUserIdAndDateRange(userId, weekStart, weekEnd));
         
-
-        System.out.println("ああああ");
-        
         int workoutDays = countDaysExceedingTarget(workoutData, goal.getSessionTimeMinutes());
         
-        for (Map.Entry<LocalDate, Duration> entry : workoutData.entrySet()) {
-            LocalDate date = entry.getKey();
-            Duration duration = entry.getValue();
 
-            System.out.println("日付: " + date + ", 合計時間: " + duration);
-        }
-        // 今週の運動日数取得
-//        int workoutDays = workoutRepository.countDistinctWorkoutDays(userId, weekStart, weekEnd);
-        
         // 進捗率計算
         int targetFrequency = goal.getWeeklyFrequency();
         int progressPercentage = Math.min(100, (workoutDays * 100) / targetFrequency);
-        
-        System.out.println(progressPercentage);
         
         // 励ましメッセージ生成
         String encouragementMessage = generateEncouragementMessage(progressPercentage);
@@ -186,6 +170,7 @@ public class WorkoutService {
         // 結果を格納するマップ。キー：日付、値：その日の合計運動時間
         Map<LocalDate, Duration> result = new HashMap<>();
 
+//        nullチェック
         if (workouts.size()==0||workouts.isEmpty())    {
         	return result;
         }
@@ -220,6 +205,7 @@ public class WorkoutService {
     public static int countDaysExceedingTarget(Map<LocalDate, Duration> workoutDurations, int targetMinutes) {
         int count = 0;
 
+//        nullチェック
         if (workoutDurations.size()==0||workoutDurations.isEmpty()) {
         	return count;
         }

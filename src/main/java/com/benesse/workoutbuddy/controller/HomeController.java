@@ -1,10 +1,14 @@
 package com.benesse.workoutbuddy.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.benesse.workoutbuddy.dto.ProgressDto;
 import com.benesse.workoutbuddy.service.BuddyService;
 import com.benesse.workoutbuddy.service.NotificationService;
 import com.benesse.workoutbuddy.service.UserService;
@@ -24,19 +28,35 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         String userId = "05201";
-        String buddyId="123456789";
+        List<String> buddys=new ArrayList<String>();
+        String buddyId1="123456789";
+        String buddyId2="0520";
+        buddys.add(buddyId1);
+        buddys.add(buddyId2);
+        
+        
 //        if (userId == null) {
 //            return "redirect:/login";
 //        }
 //        
         try {
-            HomeService.HomeData result = new HomeService(userService, workoutService, buddyService, notificationService).getHomeData(userId);
+        	System.out.println("userName:"+workoutService.getUserInfo(userId));
+        	System.out.println("progress:"+workoutService.getWeeklyProgress(userId));
+    		List<String> buddyNames=new ArrayList<String>();
+    		List<ProgressDto> buddyProgressList=new ArrayList<ProgressDto>();
+        	for (int i=0;i<buddys.size();i++) {
+        		buddyNames.add(workoutService.getUserInfo(buddys.get(i)));
+        		
+        		buddyProgressList.add(workoutService.getWeeklyProgress(buddys.get(i)));
+        	}
+        	
+        	System.out.println("buddyNames:"+buddyNames.get(0)+buddyNames.get(1));
+        	System.out.println("buddyProgressList:"+buddyProgressList.get(0)+buddyProgressList.get(1));
+        	
             model.addAttribute("userName", workoutService.getUserInfo(userId));
             model.addAttribute("progress", workoutService.getWeeklyProgress(userId));
-            System.out.println(workoutService.getWeeklyProgress(buddyId).getCompletedWorkouts()+"できてる？");
-//            
-            model.addAttribute("buddyProgress", result.getBuddyProgress());
-            model.addAttribute("unreadNotificationCount", result.getUnreadNotificationCount());
+            model.addAttribute("buddyNames", buddyNames);
+            model.addAttribute("buddyProgress", buddyProgressList);
             return "home";
         } catch (Exception e) {
         	e.printStackTrace();
