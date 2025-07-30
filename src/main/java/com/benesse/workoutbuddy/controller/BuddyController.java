@@ -29,10 +29,8 @@ public class BuddyController {
             
             // 成功メッセージを設定
             model.addAttribute("successMessage", "バディを追加しました");
-            
-            
                        
-            return "buddy/search";
+            return "buddy/editedlist";
         }
         
     
