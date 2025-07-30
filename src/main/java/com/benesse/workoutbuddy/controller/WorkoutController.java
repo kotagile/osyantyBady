@@ -99,9 +99,8 @@ public class WorkoutController {
      * @return 運動完了画面のテンプレート名
      */
     @GetMapping("/complete")
-    public String showWorkoutComplete(Model model) {
+    public String showWorkoutComplete(@RequestParam String workoutId, Model model) {
         String userId = "1234567890";
-        String workoutId = "1234567890";
         if (userId == null || workoutId == null) {
             return "redirect:/";
         }
@@ -127,9 +126,8 @@ public class WorkoutController {
      * @return リダイレクト先のURL
      */
     @PostMapping("/complete")
-    public String completeWorkout(@RequestParam String comment, RedirectAttributes redirectAttributes) {
+    public String completeWorkout(@RequestParam String workoutId, @RequestParam String comment, RedirectAttributes redirectAttributes) {
         String userId = "1234567890";
-        String workoutId = "1234567890";
         if (userId == null || workoutId == null) {
             return "redirect:/";
         }

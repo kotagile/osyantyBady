@@ -43,7 +43,7 @@
                     console.log('startTimeStr:', window.startTimeStr);
                 </script>
                 
-                <button class="complete-workout-btn" onclick="window.location.href='/workout/complete'">
+                <button class="complete-workout-btn" th:onclick="'window.location.href=\'' + @{/workout/complete(workoutId=${workout.workoutId})} + '\''">
                     運動完了
                 </button>
             </div>

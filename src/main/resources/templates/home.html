@@ -144,7 +144,7 @@
 					<img class="nav-icon" th:src="@{/img/buddy-icon.png}">
 					<p class="nav-label">バディ追加</p>
 				</a>
-				<a th:href="@{/workout/in-progress}" class="nav-item">
+				<a th:action="@{/workout/start-with-goal}" method="post" class="nav-item">
 					<div class="nav-icon-box">
 						<img class="nav-icon workout-nav-icon" th:src="@{/img/workout-icon.png}">
 					</div>
