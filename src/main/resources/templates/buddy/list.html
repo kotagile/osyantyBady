@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>バディ追加画面</title>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/buddy.css}">
 </head>
@@ -83,36 +84,34 @@
         </div>
     </div>
     
-    <!-- ボトムナビゲーション -->
     <nav class="bottom-nav">
-        <div class="nav-container">
-            <a href="/" class="nav-item">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-label">ホーム</span>
-            </a>
-            <a href="/buddy" class="nav-item active">
-                <span class="nav-icon">👥</span>
-                <span class="nav-label">バディ一覧</span>
-            </a>
-            <div class="nav-item center-action">
-                <form th:action="@{/workout/start-with-goal}" method="post" style="display: inline;">
-                    <button type="submit" class="nav-center-btn">
-                        <span class="center-icon">🏃</span>
-                    </button>
-                </form>
-                <span class="nav-label">運動を始める</span>
-            </div>
-            <a href="/workout/records" class="nav-item">
-                <span class="nav-icon">📊</span>
-                <span class="nav-label">私の記録</span>
-            </a>
-            <a href="/goal/set" class="nav-item">
-                <span class="nav-icon">📋</span>
-                <span class="nav-label">目標設定</span>
-            </a>
-        </div>
-    </nav>
-    
+<!--     ボトムナビゲーション -->
+    <nav class="bottom-nav">
+		<div class="nav-container">
+				<a th:href="@{/}" class="nav-item">
+					<img class="nav-icon" th:src="@{/img/house-icon.png}">
+					<p class="nav-label">ホーム</p>
+				</a>
+				<a th:href="@{/buddy}" class="nav-item">
+					<img class="nav-icon" th:src="@{/img/buddy-icon.png}">
+					<p class="nav-label">バディ追加</p>
+				</a>
+				<a th:href="@{/workout/in-progress}" class="nav-item">
+					<div class="nav-icon-box">
+						<img class="nav-icon workout-nav-icon" th:src="@{/img/workout-icon.png}">
+					</div>
+					<p class="nav-label">運動を始める</p>
+				</a>
+				<a th:href="@{/record}" class="nav-item">
+					<img class="nav-icon" th:src="@{/img/graph-icon.png}">
+					<p class="nav-label">私の記録</p>
+				</a>
+				<a th:href="@{/goal/set}" class="nav-item">
+					<img class="nav-icon" th:src="@{/img/goal-icon.png}">
+					<p class="nav-label">目標設定</p>
+				</a>
+		</div>
+	</nav>
     <script th:src="@{/js/buddy.js}"></script>
 </body>
 </html> 

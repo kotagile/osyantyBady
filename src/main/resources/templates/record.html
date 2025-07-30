@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html　xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>私の記録</title>
+		<link rel="stylesheet" th:href="@{/css/reset.css}">
+	    <link rel="stylesheet" th:href="@{/css/common.css}">
+	    <link rel="stylesheet" th:href="@{/css/record.css}">
+	</head>
+	<body>
+		<div class="home-container">
+			<h1>私の記録画面だよ</h1>
+		</div>
+		
+		<!--     ボトムナビゲーション -->
+    <nav class="bottom-nav">
+		<div class="nav-container">
+				<a th:href="@{/}" class="nav-item">
+					<img class="nav-icon" th:src="@{/img/house-icon.png}">
+					<p class="nav-label">ホーム</p>
+				</a>
+				<a th:href="@{/buddy}" class="nav-item">
+					<img class="nav-icon" th:src="@{/img/buddy-icon.png}">
+					<p class="nav-label">バディ追加</p>
+				</a>
+				<a th:href="@{/workout/in-progress}" class="nav-item">
+					<div class="nav-icon-box">
+						<img class="nav-icon workout-nav-icon" th:src="@{/img/workout-icon.png}">
+					</div>
+					<p class="nav-label">運動を始める</p>
+				</a>
+				<a th:href="@{/record}" class="nav-item">
+					<img class="nav-icon" th:src="@{/img/graph-icon.png}">
+					<p class="nav-label">私の記録</p>
+				</a>
+				<a th:href="@{/goal/set}" class="nav-item">
+					<img class="nav-icon" th:src="@{/img/goal-icon.png}">
+					<p class="nav-label">目標設定</p>
+				</a>
+		</div>
+	</nav>
+	</body>
+</html>

@@ -61,7 +61,7 @@ public class NotificationRepository {
                     "FROM notifications n " +
                     "LEFT JOIN users u1 ON n.from_user_id = u1.user_id " +
                     "LEFT JOIN users u2 ON n.to_user_id = u2.user_id " +
-                    "WHERE n.to_user_id = ? " +
+                    "WHERE n.to_user_id = ? AND n.notification_type IS NOT NULL " +
                     "ORDER BY n.created_at DESC";
         return jdbcTemplate.query(sql, notificationRowMapper, toUserId);
     }
@@ -74,7 +74,7 @@ public class NotificationRepository {
                     "FROM notifications n " +
                     "LEFT JOIN users u1 ON n.from_user_id = u1.user_id " +
                     "LEFT JOIN users u2 ON n.to_user_id = u2.user_id " +
-                    "WHERE n.to_user_id = ? AND n.is_read = 0 " +
+                    "WHERE n.to_user_id = ? AND n.is_read = 0 AND n.notification_type IS NOT NULL " +
                     "ORDER BY n.created_at DESC";
         return jdbcTemplate.query(sql, notificationRowMapper, toUserId);
     }

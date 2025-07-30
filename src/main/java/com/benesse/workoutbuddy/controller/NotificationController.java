@@ -89,4 +89,31 @@ public class NotificationController {
         NotificationService.ActionResult result = notificationService.tryMarkAllAsRead(userId);
         return ResponseEntity.ok(Map.of("success", result.isSuccess(), "message", result.getMessage()));
     }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> deleteNotification(@RequestParam String notificationId, HttpSession session) {
+        String userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "ログインが必要です"));
+        }
+        NotificationService.ActionResult result = notificationService.tryDeleteNotification(notificationId, userId);
+        return ResponseEntity.ok(Map.of("success", result.isSuccess(), "message", result.getMessage()));
+    }
+
+    @GetMapping("/details")
+    public String showNotificationDetails(@RequestParam String notificationId, Model model, HttpSession session) {
+        String userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        
+        NotificationService.NotificationDetailResult result = notificationService.getNotificationDetails(notificationId, userId);
+        if (result.isSuccess()) {
+            model.addAttribute("notification", result.getNotification());
+            return "notifications/details";
+        } else {
+            return "redirect:/notifications";
+        }
+    }
 } 
