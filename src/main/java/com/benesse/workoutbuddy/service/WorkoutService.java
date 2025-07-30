@@ -139,11 +139,17 @@ public class WorkoutService {
         LocalDate weekStart = today.with(DayOfWeek.MONDAY);
         LocalDate weekEnd = today.with(DayOfWeek.SUNDAY);
         
+
+        System.out.println(workoutRepository.findByUserIdAndDateRange(userId, weekStart, weekEnd));
+        
         // 今週の運動日数取得
         Map<LocalDate, Duration> workoutData=summarizeWorkoutTimes(workoutRepository.findByUserIdAndDateRange(userId, weekStart, weekEnd));
+        
+
+        System.out.println("ああああ");
+        
         int workoutDays = countDaysExceedingTarget(workoutData, goal.getSessionTimeMinutes());
         
-        System.out.println(workoutDays+"ああああ");
         for (Map.Entry<LocalDate, Duration> entry : workoutData.entrySet()) {
             LocalDate date = entry.getKey();
             Duration duration = entry.getValue();
@@ -180,6 +186,10 @@ public class WorkoutService {
         // 結果を格納するマップ。キー：日付、値：その日の合計運動時間
         Map<LocalDate, Duration> result = new HashMap<>();
 
+        if (workouts.size()==0||workouts.isEmpty())    {
+        	return result;
+        }
+        
         // すべての Workout を処理
         for (Workout workout : workouts) {
             // 運動の日付を取得
@@ -210,6 +220,10 @@ public class WorkoutService {
     public static int countDaysExceedingTarget(Map<LocalDate, Duration> workoutDurations, int targetMinutes) {
         int count = 0;
 
+        if (workoutDurations.size()==0||workoutDurations.isEmpty()) {
+        	return count;
+        }
+        
         for (Map.Entry<LocalDate, Duration> entry : workoutDurations.entrySet()) {
             Duration duration = entry.getValue();
             int minutes = (int) duration.toMinutes();
@@ -457,4 +471,13 @@ public class WorkoutService {
             return new RecordsResult(java.util.List.of(), "");
         }
     }
+
+	public String getUserInfo(String userId) {
+		Optional<User> users= userRepository.findById(userId);
+		if (users.isPresent()) {
+			return users.get().getUserName();
+		}
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 } 

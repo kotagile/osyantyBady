@@ -31,13 +31,15 @@ public class HomeController {
 //        
         try {
             HomeService.HomeData result = new HomeService(userService, workoutService, buddyService, notificationService).getHomeData(userId);
-            model.addAttribute("userName", result.getUserName());
+            model.addAttribute("userName", workoutService.getUserInfo(userId));
             model.addAttribute("progress", workoutService.getWeeklyProgress(userId));
+            System.out.println(workoutService.getWeeklyProgress(buddyId).getCompletedWorkouts()+"できてる？");
+//            
             model.addAttribute("buddyProgress", result.getBuddyProgress());
-            System.out.println(result.getBuddyProgress()+"バディ");
             model.addAttribute("unreadNotificationCount", result.getUnreadNotificationCount());
             return "home";
         } catch (Exception e) {
+        	e.printStackTrace();
             return "redirect:/login";
         }
     }
