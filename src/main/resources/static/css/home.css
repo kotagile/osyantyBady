@@ -1,9 +1,7 @@
 /* ホーム画面専用スタイル */
 .home-container {
     width: 420px;
-    margin: 0 auto;
-    padding: 0 0 80px 0;
-    min-height: 100vh;
+    margin: 80px auto 0;
     background: #fafafa;
 }
 
@@ -62,15 +60,43 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
+.goal-area{
+	background: #e9d7B9;
+	border-radius: 18px;
+	padding: 25px;
+	
+}
+
+.goal-text{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.goal-text p{
+	color: #916500;
+	padding-right: 10px;
+}
+
+
+.goal-text img{
+	width: 15px;
+	height: 15px;
+}
+
+.goal-content{
+	color: #916500;
+}
+
 .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: flex-end;
     margin-bottom: 8px;
 }
 
-.goal-title {
-    font-size: 1.1rem;
+.card-title {
+    font-size: 18px;
     font-weight: 600;
     margin: 0;
     color: #fff;
@@ -82,10 +108,9 @@
     color: #fff;
 }
 
-.card-subtitle {
-    font-size: 1rem;
-    color: #ccc;
-    margin-bottom: 20px;
+.goal-title {
+    font-size: 18px;
+    color: #fff;
 }
 
 .progress-bar {
@@ -109,8 +134,8 @@
 }
 
 .progress-message {
-    font-size: 0.95rem;
-    color: #ffe6b8;
+    font-size: 14px;
+    color: #fff;
     margin-bottom: 20px;
     line-height: 1.4;
 }
