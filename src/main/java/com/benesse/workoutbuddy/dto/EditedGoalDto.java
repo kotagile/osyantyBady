@@ -1,13 +1,15 @@
 package com.benesse.workoutbuddy.dto;
 
+import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GoalDto {
+public class EditedGoalDto {
     private Long goalId;
     private String userId;
     private String goalDuration;
@@ -15,6 +17,6 @@ public class GoalDto {
     private String exerciseType;
     private Integer sessionTimeMinutes;
     private Boolean isActive;
-    private String createdAt;
-    private String updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 } 

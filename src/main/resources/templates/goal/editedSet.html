@@ -9,10 +9,10 @@
 </head>
 <body>
 	<section class="goal">
-		<form  th:action="@{/goal}" th:object="${goalDto}" method="POST">
+		<form  th:action="@{/goal}" th:object="${goalDto}" method="post">
 			<div class="label-item">
-				<label for="name">運動種別</label>
-				<select name="ex">
+				<label for="exerciseType">運動種別</label>
+				<select th:field="*{exerciseType}">
 					<option value="">選択してください</option>
 					<option value="ウォーキング">ウォーキング</option>
 					<option value="ランニング">ランニング</option>
@@ -20,12 +20,12 @@
 				</select>
 			</div>
 			<div class="label-item">
-				<label for="name">1回あたりの運動時間</label>
-				<input type="text">
+				<label for="sessionTimeMinutes">1回あたりの運動時間</label>
+				<input type="text" th:field="*{sessionTimeMinutes}">
 			</div>
 			<div class="label-item">
-				<label for="name">目標期間</label>
-				<select>
+				<label for="goalDuration">目標期間</label>
+				<select th:field="*{goalDuration}">
 					<option value="">選択してください</option>
 					<option value="1週間">1週間</option>
 					<option value="2週間">2週間</option>
@@ -33,20 +33,21 @@
 				</select>
 			</div>
 			<div class="label-item">
-				<label for="name">1週間当たりの運動する頻度</label>
-				<select>
+				<label for="weeklyFrequency">1週間当たりの運動する頻度</label>
+				<select th:field="*{weeklyFrequency}">
 					<option value="">選択してください</option>
-					<option value="週1回">週1回</option>
-					<option value="週1回">週2回</option>
-					<option value="週1回">週3回</option>
-					<option value="週1回">週4回</option>
-					<option value="週1回">週5回</option>
-					<option value="週1回">週6回</option>
-					<option value="週1回">週7回</option>
+					<option value="1">週1回</option>
+					<option value="2">週2回</option>
+				<option value="3">週3回</option>
+					<option value="4">週4回</option>
+					<option value="5">週5回</option>
+					<option value="6">週6回</option>
+					<option value="7">週7回</option>
 				</select>
 			</div>
 			<button type="submit">登録する</button>
 		</form>
 	</section>
+	
 </body>
 </html> 
