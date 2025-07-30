@@ -1,69 +1,78 @@
 package com.benesse.workoutbuddy.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.benesse.workoutbuddy.dto.GoalDto;
+import com.benesse.workoutbuddy.dto.EditedGoalDto;
 import com.benesse.workoutbuddy.service.GoalService;
-import com.benesse.workoutbuddy.util.SecurityUtil;
-
-import jakarta.servlet.http.HttpSession;
-
+//各メソッドにセッションによるログイン状態の確認を追加する必要あり
 @Controller
-@RequestMapping("/goal")
+//@RequestMapping("/goal")
 public class GoalController {
-    @Autowired
-    private GoalService goalService;
-
-    @GetMapping("/set")
-    public String showGoalSettingForm(Model model, HttpSession session) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return "redirect:/login";
-        }
-        GoalDto goalDto = goalService.getGoalDtoForUser(userId);
-        model.addAttribute("goalDto", goalDto);
-        return "goal/set";
-    }
-
-    @PostMapping("/set")
-    public String setGoal(@Validated @ModelAttribute GoalDto goalDto,
-                         BindingResult bindingResult,
-                         Model model,
-                         HttpSession session,
-                         RedirectAttributes redirectAttributes) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return "redirect:/login";
-        }
-        if (bindingResult.hasErrors()) {
-            return "goal/set";
-        }
-        try {
-            goalService.setGoal(userId, goalDto);
-            redirectAttributes.addFlashAttribute("success", "目標設定が完了しました！");
-            return "redirect:/";
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-            return "goal/set";
-        }
-    }
-
-    @GetMapping("/history")
-    public String showGoalHistory(Model model, HttpSession session) {
-        String userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("goalHistory", goalService.getGoalHistorySafe(userId));
-        return "goal/history";
-    }
-} 
+	@Autowired
+	private GoalService goalService;
+	
+	@GetMapping("/goal")
+	/**目標設定画面表示コントローラーメソッド
+	 * @param model
+	 * @return 空の目標DTOを含んだ状態で目標設定htmlを表示
+	 */
+	public String showGoalSettingForm(Model model) {
+		model.addAttribute("goalDto", new EditedGoalDto());
+		return "goal/editedSet";
+	}
+	
+	@PostMapping("/goal")
+	/**目標設定DB挿入コントローラーメソッド
+	 * @param goalDto
+	 * @param bindingResult
+	 * @param model
+	 * @return
+	 */
+	//    本当は引数にセッションを入れてID特定に使う
+	public String setGoal(
+	        EditedGoalDto goalDto,
+	        BindingResult bindingResult,
+	        Model model) {
+		//    	セッションを後回しにするのでここでは仮のユーザーIDを設定
+		String userId = "1234567890";
+		
+		//    	エラー時にリダイレクト
+		if (bindingResult.hasErrors()) {
+			return "redirect:goal/editedSet";
+		}
+		
+		//    	セッションに格納されているID(DB内の過去目標論理削除用)と目標設定Dtoを受け取りながらサービスの目標設定メソッドたたき
+		try {
+			model.addAttribute("success", "目標の設定が完了しました。");
+			goalService.setGoal(userId, goalDto);
+		} catch (Exception e) {
+			model.addAttribute("error", "エラーが発生しました。");
+			return "redirect:goal/editedSet";
+		}
+		
+		//    	登録完了後はホーム画面遷移？（間違ってたらごめん）
+		return "home";
+	}
+	
+	@GetMapping("/goal/get")
+	/**
+	 * 登録済みの最新目標の取得メソッド（とりあえず自分の目標のみ、バディの目標取得は別スプリントにて）
+	 * @param model
+	 * @return ホーム画面などの目標を表示したい画面
+	 */
+	public String showLatestGoal(Model model) {
+		
+		//      本当は引数にセッションを入れてID特定に使う
+		String userId = "1234567890";
+		
+		//DBからIDをもとに最新の目標を取得
+		EditedGoalDto latestGoal = goalService.getLatestGoal(userId);
+		model.addAttribute("latestGoal", latestGoal);
+		
+		return "home";
+	}
+	
+}
