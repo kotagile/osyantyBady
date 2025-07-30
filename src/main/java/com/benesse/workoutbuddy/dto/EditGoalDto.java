@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditedGoalDto {
+public class EditGoalDto {
     private Long goalId;
     private String userId;
     private String goalDuration;

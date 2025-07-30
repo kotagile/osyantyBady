@@ -13,7 +13,7 @@ import com.benesse.workoutbuddy.repository.BuddyInsertRepository;
  * バディサービス
  */
 @Service
-public class BuddyService {
+public class editedbydoiBuddyService {
 
     
     @Autowired

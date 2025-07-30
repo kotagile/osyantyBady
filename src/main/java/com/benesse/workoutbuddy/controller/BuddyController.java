@@ -13,7 +13,7 @@ import com.benesse.workoutbuddy.service.BuddyService;
 public class BuddyController {
 	@Autowired
 	private BuddyService buddyService;
-    @GetMapping("/buddy/add")
+    @GetMapping("/buddy")
     public String displayAddBuddy() {
            
   
