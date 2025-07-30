@@ -77,6 +77,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ホーム</title>
+    
+	<!--    GoogleFont-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/home.css}">
@@ -90,15 +96,14 @@
 				<div class="goal-area">
 					<div class="goal-text">
 						<p>あなたの目標</p>
-						<img th:src="@{/img/pulldown-before.png}">
+						<img th:src="@{/img/pulldown-before.png}" id="goalToggle">
 					</div>
-					<div class="goal-content">
+					<div class="goal-content" id="goalContent">
 						<p>ウォーキング20分</p>
 						<p>全体目標 : 2週間</p>
 						<p>週間目標 : 週2回</p>
 					</div>
 				</div>
-                <div class="goal-title">週間目標: 週<span th:text="${progress.goalFrequency}">4</span>回</div>
                 <div class="card-header">
                     <h2 class="card-title">あなたの週間進捗</h2>
                     <div class="progress-percentage" th:text="${progress.completedWorkouts} + '%'">67</div>
