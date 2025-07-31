@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>運動中</title>
+    
+    <!--    GoogleFont-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+	
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/workout.css}">
+</head>
+<body>
+    <div class="workout-container">
+		<a th:href="@{/sample/home}" class="close-icon">
+			<img th:src="@{/img/close-icon.png}">
+		</a>
+        <div class="workout-progress-card">
+            <h2 class="workout-progress-title">目標達成まであと</h2>
+      		<div id="timer" class="timer">00:00</div>
+      		<div class="btn stop-btn">休憩する</div>
+            <a th:href="@{/sample/workout/complete}" class="btn workout-complete-btn">運動を終了</a>
+            
+             
+
+            
+        </div>
+
+    </div>
+    
+    <script th:src="@{/js/workout.js}"></script>
+</body>
+</html>
