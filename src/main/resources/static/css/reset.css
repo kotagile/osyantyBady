@@ -5,6 +5,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Noto Sans JP", sans-serif;
 }
 
 *::before,
@@ -26,3 +27,26 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+select,
+::picker(select) {
+  appearance: base-select;
+}
+
+::picker(select){
+	padding: 20px;
+}
+
+option{
+	padding: 5px;
+}
+option:checked{
+	background: #e0e0e0;
+	width: 100%;
+}
+
+select{
+	color: #4C4C4C;
+}
+
+

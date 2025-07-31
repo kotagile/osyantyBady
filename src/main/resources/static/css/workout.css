@@ -1,179 +1,122 @@
-/* Workout Start Page */
-.workout-start-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-    padding: 36px 24px 28px 24px;
-    width: 400px;
-    margin: 60px auto 0 auto;
+
+
+/* -------------------------------------------------------------------------------------
+
+運動中画面
+
+--------------------------------------------------------------------------------------*/
+
+
+.workout-container{
+	background: #4C4C4C;
+	height: 100vh;
+	width: 450px;
+	margin: 0 auto;
+	position: relative;
 }
 
-.workout-start-title {
-    text-align: center;
-    font-size: 1.4rem;
-    font-weight: 500;
-    margin-bottom: 28px;
-    letter-spacing: 0.05em;
+.close-icon{
+	display: block;
+	position: absolute;
+	top: 30px;
+	right: 20px;
 }
 
-.exercise-type-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+.close-icon img{
+	width: 50px;
+	height: 50px;
 }
 
-.exercise-type-btn {
-    background: #E9E9ED;
-    border: 2px solid transparent;
-    border-radius: 12px;
-    padding: 20px 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 500;
-}
-
-.exercise-type-btn:hover {
-    background: #f0f0f4;
-    border-color: #C49A47;
-}
-
-.exercise-type-btn.selected {
-    background: #C49A47;
-    color: #fff;
-    border-color: #C49A47;
-}
-
-.start-workout-btn {
-    background: #C49A47;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    width: 100%;
-    padding: 12px 0;
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-top: 10px;
-    box-shadow: 0 2px 6px rgba(196,154,71,0.10);
-    transition: background 0.2s;
-}
-
-.start-workout-btn:hover {
-    background: #b88a2c;
-}
-
-/* Workout In-Progress Page */
 .workout-progress-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-    padding: 36px 24px 28px 24px;
-    width: 400px;
-    margin: 60px auto 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
 }
 
 .workout-progress-title {
+	color: #fff;
     text-align: center;
-    font-size: 1.4rem;
+    font-size: 20px;
     font-weight: 500;
-    margin-bottom: 28px;
     letter-spacing: 0.05em;
 }
 
-.timer-display {
-    text-align: center;
-    margin: 24px 0;
-}
-
 .timer {
-    font-size: 3rem;
+	text-align: center;
+    font-size: 80px;
     font-weight: 700;
-    color: #C49A47;
-    font-family: 'Courier New', monospace;
-}
-
-.timer-label {
-    font-size: 1rem;
-    color: #666;
-    margin-top: 8px;
-}
-
-.progress-info {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 24px 0;
-}
-
-.progress-info h3 {
-    margin: 0 0 12px 0;
-    color: #333;
-    font-size: 1.1rem;
-}
-
-.progress-info p {
-    margin: 8px 0;
-    color: #666;
-}
-
-.complete-workout-btn {
-    background: #28a745;
     color: #fff;
-    border: none;
-    border-radius: 8px;
-    width: 100%;
-    padding: 12px 0;
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-top: 10px;
-    box-shadow: 0 2px 6px rgba(40,167,69,0.10);
-    transition: background 0.2s;
+   
+    margin: 15px 0 30px;
 }
 
-.complete-workout-btn:hover {
-    background: #218838;
+.stop-btn{
+	color: #4c4c4c;
+	background: #fff;
+	width: 60%;
 }
 
-/* Workout Complete Page */
+.stop-btn:hover{
+	background: #f8f9fa;
+}
+
+.workout-complete-btn{
+	margin-top: 20px;
+	width: 60%;
+}
+
+
+
+
+
+
+/* -------------------------------------------------------------------------------------
+
+運動完了画面
+
+--------------------------------------------------------------------------------------*/
+
+
+
 .workout-complete-card {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
     background: #fff;
     border-radius: 20px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.10);
     padding: 36px 24px 28px 24px;
-    width: 400px;
-    margin: 60px auto 0 auto;
+    width: 380px;
+    margin:0 auto;
 }
 
 .workout-complete-title {
     text-align: center;
-    font-size: 1.4rem;
-    font-weight: 500;
-    margin-bottom: 28px;
-    letter-spacing: 0.05em;
+    font-size: 20px;
 }
 
 .completion-summary {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 24px 0;
+/*    background: #f8f9fa;*/
+/*    border-radius: 12px;*/
+/*    padding: 20px;*/
+/*    margin: 24px 0;*/
     text-align: center;
 }
 
 .completion-summary h3 {
-    margin: 0 0 12px 0;
     color: #333;
-    font-size: 1.1rem;
+    font-size: 18px;
+    margin-top: 10px;
 }
 
 .completion-summary .duration {
-    font-size: 2rem;
+    font-size: 60px;
     font-weight: 700;
-    color: #C49A47;
-    margin: 12px 0;
+    color: #D0a33c;
 }
-
 .comment-form {
     margin: 24px 0;
 }
@@ -195,20 +138,21 @@
     font-family: inherit;
 }
 
-.finish-workout-btn {
-    background: #C49A47;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    width: 100%;
-    padding: 12px 0;
-    font-size: 1.1rem;
-    font-weight: 500;
+ .report-btn {
+    width: 65%;
     margin-top: 10px;
-    box-shadow: 0 2px 6px rgba(196,154,71,0.10);
-    transition: background 0.2s;
 }
 
-.finish-workout-btn:hover {
-    background: #b88a2c;
-} 
+
+.continue-btn{
+	color: #4C4C4C;
+	background: #fff;
+	width: 65%;
+	margin-top: 10px;
+}
+
+.continue-btn:hover{
+	color: #4C4C4C;
+	background: #f8f9fa;
+}
+
