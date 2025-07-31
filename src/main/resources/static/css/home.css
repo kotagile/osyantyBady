@@ -1,11 +1,10 @@
-/* ホーム画面専用スタイル */
-.home-container {
-    width: 420px;
-    margin: 80px auto 0;
-    background: #fafafa;
-}
 
-/* ヘッダー */
+
+/* -------------------------------------------------------------------------------------
+
+ホーム画面
+
+--------------------------------------------------------------------------------------*/
 .header {
     display: flex;
     justify-content: space-between;
@@ -44,12 +43,12 @@
     text-align: center;
 }
 
-/* メインコンテンツ */
-.main-content {
-    padding: 0 20px;
-}
+/*----------------------------------------------------------------------- 
 
-/* 進捗カード */
+   進捗カード 
+   
+------------------------------------------------------------------------*/
+
 .progress-card, .buddy-progress-card {
     background: #444;
     border-radius: 16px;
@@ -61,7 +60,7 @@
 }
 
 .goal-area{
-	background: #e9d7B9;
+	background: #E9D7B9;
 	border-radius: 18px;
 	padding: 25px;
 	margin-bottom: 20px;
@@ -101,6 +100,10 @@
 	padding: 2px 0;
 }
 
+.goal-content p:first-child{
+	padding-top: 10px;
+}
+
 .goal-title {
     font-size: 18px;
     color: #fff;
@@ -121,7 +124,7 @@
 }
 
 .progress-percentage {
-    font-size: 2.1rem;
+    font-size: 40px;
     font-weight: bold;
     color: #fff;
 }
