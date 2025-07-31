@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目標設定画面</title>
+    
+    <!--    GoogleFont-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+	
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/goal.css}">
+   
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+        
+        <form method="post">
+            <div class="goal-card">
+                <div class="form-group">
+                    <label class="form-label">運動種別</label>
+                    <select class="form-select" name="exerciseType" required>
+                        <option value="" hidden>運動種別を選択してください</option>
+                        <option value="ランニング">ランニング</option>
+                        <option value="ウォーキング">ウォーキング</option>
+                        <option value="サイクリング">サイクリング</option>
+                        <option value="ジムトレーニング">ジムトレーニング</option>
+                        <option value="ヨガ・ストレッチ">ヨガ・ストレッチ</option>
+                        <option value="水泳">水泳</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">運動時間（分）</label>
+                    <input type="number" class="form-input" name="sessionTimeMinutes" placeholder="運動時間を入力してください" min="1" max="300" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">目標期間</label>
+                    <select class="form-select" name="goalDuration" required>
+                        <option value="" hidden>目標期間を選択してください</option>
+                        <option value="3months">3ヶ月</option>
+                        <option value="6months">6ヶ月</option>
+                        <option value="1year">1年</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">1週間当たりの運動する頻度</label>
+                    <select class="form-select" name="weeklyFrequency" required>
+                        <option value="" hidden>運動する頻度を選択してください</option>
+                        <option value="1">週1回</option>
+                        <option value="2">週2回</option>
+                        <option value="3">週3回</option>
+                        <option value="4">週4回</option>
+                        <option value="5">週5回</option>
+                        <option value="6">週6回</option>
+                        <option value="7">毎日</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="register-btn">登録する</button>
+            </div>
+        </form>
+        
+        <!-- ナビゲーション -->
+        </div>
+    </div>
+    
+   <!--     ボトムナビゲーション -->
+	    <nav class="bottom-nav">
+			<div class="nav-container">
+					<a th:href="@{/sample/home}" class="nav-item">
+						<img class="nav-icon" th:src="@{/img/house-icon.png}">
+						<p class="nav-label">ホーム</p>
+					</a>
+					<a th:href="@{/sample/buddy}" class="nav-item">
+						<img class="nav-icon" th:src="@{/img/buddy-icon.png}">
+						<p class="nav-label">バディ追加</p>
+					</a>
+					<a th:href="@{/sample/workout}" class="nav-item">
+						<div class="nav-icon-box">
+							<img class="nav-icon workout-nav-icon" th:src="@{/img/workout-icon.png}">
+						</div>
+						<p class="nav-label">運動を始める</p>
+					</a>
+					<a th:href="@{/sample/record}" class="nav-item">
+						<img class="nav-icon" th:src="@{/img/graph-icon.png}">
+						<p class="nav-label">私の記録</p>
+					</a>
+					<a th:href="@{/sample/goal}" class="nav-item">
+						<img class="nav-icon" th:src="@{/img/goal-icon.png}">
+						<p class="nav-label">目標設定</p>
+					</a>
+			</div>
+		</nav>
+    
+</body>
+</html>
