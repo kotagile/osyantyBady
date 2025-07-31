@@ -15,12 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 	goalToggle.addEventListener("click", function() {
 		goalContent.classList.toggle("open");
-		
-		if(goalContent.classList.contains("open")){
-			goalToggle.setAttribute("src", "/img/pulldown-after.png");
-		} else{
-			goalToggle.setAttribute("src", "/img/pulldown-before.png");
-		}
 	});
 
 });
