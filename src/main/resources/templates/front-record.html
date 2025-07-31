@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホーム</title>
+    
+	<!--    GoogleFont-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+	
+    <div class="container">
+        <div class="main-content">
+			<h1>私の記録画面</h1>
+		</div>
+    </div>
+    
+<!--     ボトムナビゲーション -->
+	    <nav class="bottom-nav">
+			<div class="nav-container">
+					<a th:href="@{/sample/home}" class="nav-item">
+						<img class="nav-icon" th:src="@{/img/house-icon.png}">
+						<p class="nav-label">ホーム</p>
+					</a>
+					<a th:href="@{/sample/buddy}" class="nav-item">
+						<img class="nav-icon" th:src="@{/img/buddy-icon.png}">
+						<p class="nav-label">バディ追加</p>
+					</a>
+					<a th:href="@{/sample/workout}" class="nav-item">
+						<div class="nav-icon-box">
+							<img class="nav-icon workout-nav-icon" th:src="@{/img/workout-icon.png}">
+						</div>
+						<p class="nav-label">運動を始める</p>
+					</a>
+					<a th:href="@{/sample/record}" class="nav-item">
+						<img class="nav-icon" th:src="@{/img/graph-icon.png}">
+						<p class="nav-label">私の記録</p>
+					</a>
+					<a th:href="@{/sample/goal}" class="nav-item">
+						<img class="nav-icon" th:src="@{/img/goal-icon.png}">
+						<p class="nav-label">目標設定</p>
+					</a>
+			</div>
+		</nav>
+    
+    <script th:src="@{/js/home.js}"></script>
+</body>
+</html>
